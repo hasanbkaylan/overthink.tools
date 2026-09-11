@@ -58,7 +58,7 @@
 <div class="vignette"></div>
 <div class="grain"></div>
 
-<!-- GÖRÜNMEZ YOUTUBE OYNATICI (display:none yerine ekran dışına alındı) -->
+<!-- GÖRÜNMEZ YOUTUBE OYNATICI -->
 <div id="yt-player-container" style="position:fixed; top:-9999px; left:-9999px; width:200px; height:200px; opacity:0; pointer-events:none;"></div>
 
 <!-- 2. KONTROL EDİLEBİLİR ARAYÜZ KATMANI (UI) -->
@@ -99,7 +99,7 @@
     </button>
   </div>
 
-  <!-- Alt: Kompakt & Yüksek Kontrastlı Müzik Çaler Kapsülü -->
+  <!-- Alt: Kompakt & Yüksek Kontrastlı Müzik Çalar Kapsülü -->
   <div class="w-full pb-8 px-4 flex justify-center">
     <div class="glass rounded-full px-5 sm:px-7 py-3 flex items-center justify-between gap-4 sm:gap-6 shadow-2xl border border-white/10 max-w-lg w-full">
       
@@ -118,23 +118,23 @@
         </div>
       </div>
 
-      <!-- Sağ: Beyaz & Parlak Butonlar -->
+      <!-- Sağ: Bembeyaz & Dairesel Buton Grubu -->
       <div class="flex items-center gap-2 sm:gap-3 shrink-0">
         
-        <!-- Önceki Şarkı -->
-        <button id="prev-btn" class="w-9 h-9 flex items-center justify-center text-zinc-300 hover:text-white transition-all hover:bg-white/10 rounded-full">
-          <svg class="w-4 h-4 fill-currentColor" viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+        <!-- Önceki Şarkı (Beyaz Yuvarlak Buton) -->
+        <button id="prev-btn" title="Önceki Şarkı" class="w-9 h-9 flex items-center justify-center bg-white text-black hover:bg-zinc-200 rounded-full transition-all shadow-md shadow-white/10 transform active:scale-95">
+          <svg class="w-3.5 h-3.5 fill-currentColor" viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
         </button>
 
-        <!-- Oynat / Durdur (Bembeyaz Yüksek Kontrast) -->
-        <button id="play-pause-btn" class="w-10 h-10 flex items-center justify-center bg-white text-black hover:bg-zinc-200 rounded-full transition-all shadow-lg shadow-white/10 transform active:scale-95">
+        <!-- Oynat / Durdur (Daha Büyük Beyaz Yuvarlak Buton) -->
+        <button id="play-pause-btn" title="Oynat/Durdur" class="w-11 h-11 flex items-center justify-center bg-white text-black hover:bg-zinc-200 rounded-full transition-all shadow-lg shadow-white/20 transform active:scale-95">
           <svg id="icon-play" class="w-4 h-4 fill-currentColor ml-0.5" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
           <svg id="icon-pause" class="w-4 h-4 fill-currentColor hidden" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
         </button>
 
-        <!-- Sonraki Şarkı -->
-        <button id="next-btn" class="w-9 h-9 flex items-center justify-center text-zinc-300 hover:text-white transition-all hover:bg-white/10 rounded-full">
-          <svg class="w-4 h-4 fill-currentColor" viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+        <!-- Sonraki Şarkı (Beyaz Yuvarlak Buton) -->
+        <button id="next-btn" title="Sonraki Şarkı" class="w-9 h-9 flex items-center justify-center bg-white text-black hover:bg-zinc-200 rounded-full transition-all shadow-md shadow-white/10 transform active:scale-95">
+          <svg class="w-3.5 h-3.5 fill-currentColor" viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
         </button>
       </div>
 
@@ -143,7 +143,7 @@
 
 </div>
 
-<!-- YOUTUBE API & PLAYER LOGIC -->
+<!-- YOUTUBE PLAYLIST & PLAYER LOGIC -->
 <script>
   // 1. Manzara Videoları Listesi
   const videos = [
@@ -152,7 +152,7 @@
   ];
   let currentVideoIndex = 0;
 
-  // 2. Güncellenmiş Müzik Playlisti
+  // 2. Müzik Playlisti
   const playlist = [
     { title: "Kalben - Yara", id: "kmwLour0wLQ" },
     { title: "Lessio - yenildiğim tek savaştın", id: "K2-QZ-hEU9Y" },
@@ -207,7 +207,6 @@
   const videoNextBtn = document.getElementById('video-next-btn');
   const videoPrevBtn = document.getElementById('video-prev-btn');
 
-  // Başlığı sayfa açılır açılmaz anında yazdırıyoruz
   function updateTrackInfo() {
     trackNameEl.textContent = playlist[currentTrackIndex].title;
   }
@@ -218,13 +217,12 @@
     bgVideo.style.opacity = 0;
     setTimeout(() => {
       bgVideo.src = videos[index];
-      bgVideo.play().catch(e => console.log("Video auto-play bekleniyor."));
+      bgVideo.play().catch(e => console.log("Video bekleniyor."));
       bgVideo.style.opacity = 1;
     }, 400);
   }
   loadVideo(currentVideoIndex);
 
-  // Video Değiştirme Butonları
   videoNextBtn.addEventListener('click', (e) => {
     e.stopPropagation();
     currentVideoIndex = (currentVideoIndex + 1) % videos.length;
@@ -237,7 +235,7 @@
     loadVideo(currentVideoIndex);
   });
 
-  // 4. YouTube API Entegrasyonu (Hızlı ve Hatasız)
+  // 4. Reklamsız Dahili Playlist Yapılandırması
   let player = null;
   let isPlaying = false;
 
@@ -247,10 +245,12 @@
   firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
   window.onYouTubeIframeAPIReady = function() {
+    // Tüm şarkı ID'lerini tek bir kuyrukta birleştiriyoruz
+    const videoIdList = playlist.map(item => item.id).join(',');
+
     player = new YT.Player('yt-player-container', {
       height: '200',
       width: '200',
-      videoId: playlist[currentTrackIndex].id,
       playerVars: {
         'autoplay': 0,
         'controls': 0,
@@ -259,7 +259,8 @@
         'iv_load_policy': 3,
         'modestbranding': 1,
         'rel': 0,
-        'playsinline': 1
+        'playsinline': 1,
+        'playlist': videoIdList // Dahili playlist olarak başlatılır
       },
       events: {
         'onReady': onPlayerReady,
@@ -274,17 +275,26 @@
   }
 
   function onPlayerStateChange(event) {
-    // Şarkı bittiğinde sonrakine geç (0 = ENDED)
+    // YouTube dahili olarak şarkı değiştirdiğinde indeksi senkronize et
+    if (player && typeof player.getPlaylistIndex === 'function') {
+      const idx = player.getPlaylistIndex();
+      if (idx !== -1 && idx !== currentTrackIndex) {
+        currentTrackIndex = idx;
+        updateTrackInfo();
+      }
+    }
+
+    // Şarkı bittiğinde sıradakine geç
     if (event.data === 0) {
       nextTrack();
     }
-    // Şarkı çalmaya başladığında ikonları senkronize et (1 = PLAYING)
+    // Çalıyor
     else if (event.data === 1) {
       isPlaying = true;
       iconPlay.classList.add('hidden');
       iconPause.classList.remove('hidden');
     }
-    // Şarkı duraklatıldığında (2 = PAUSED)
+    // Duraklatıldı
     else if (event.data === 2) {
       isPlaying = false;
       iconPlay.classList.remove('hidden');
@@ -292,15 +302,14 @@
     }
   }
 
-  // Eğer video engelliyse veya teliften açılmazsa takılma, sonrakine geç
   function onPlayerError(event) {
-    console.warn("Şarkı açılamadı, bir sonrakine geçiliyor...", event);
+    console.warn("Şarkı atlandı:", event);
     nextTrack();
   }
 
   // Oynat / Durdur
   function togglePlay() {
-    if(!player || typeof player.playVideo !== 'function') return;
+    if(!player) return;
     
     if (isPlaying) {
       player.pauseVideo();
@@ -309,25 +318,24 @@
     }
   }
 
+  // Reklamsız Dahili İndeks Geçişi
   function nextTrack() {
     currentTrackIndex = (currentTrackIndex + 1) % playlist.length;
     updateTrackInfo();
-    if(player && typeof player.loadVideoById === 'function') {
-      player.loadVideoById(playlist[currentTrackIndex].id);
-      player.playVideo();
+    if(player && typeof player.playVideoAt === 'function') {
+      player.playVideoAt(currentTrackIndex);
     }
   }
 
   function prevTrack() {
     currentTrackIndex = (currentTrackIndex - 1 + playlist.length) % playlist.length;
     updateTrackInfo();
-    if(player && typeof player.loadVideoById === 'function') {
-      player.loadVideoById(playlist[currentTrackIndex].id);
-      player.playVideo();
+    if(player && typeof player.playVideoAt === 'function') {
+      player.playVideoAt(currentTrackIndex);
     }
   }
 
-  // Şarkı Kontrol Butonları Dinleyicileri
+  // Buton Tıklamaları
   playPauseBtn.addEventListener('click', (e) => {
     e.stopPropagation();
     togglePlay();
@@ -341,7 +349,7 @@
     prevTrack();
   });
 
-  // 5. "ODAĞI TEMİZLE" (UI Gizleme) Mantığı
+  // 5. "ODAĞI TEMİZLE" Mantığı
   let isFocused = false;
   
   focusBtn.addEventListener('click', (e) => {
