@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zihin Sakinleştirici | Overthink Tools</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink-0: #0a0a0a;
+  }
+  
+  /* --- Metin ve Görsel Seçimini Engelleme --- */
+  * {
+    -webkit-user-select: none; 
+    -ms-user-select: none; 
+    user-select: none; 
+    -webkit-user-drag: none; 
+  }
+  
+  body {
+    background: var(--ink-0);
+    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    margin: 0;
+    overflow: hidden;
+  }
+  .font-serif-display { font-family: 'Newsreader', ui-serif, Georgia, serif; }
+
+  /* Efektler */
+  .grain {
+    position: fixed; inset: 0; pointer-events: none; z-index: 1; opacity: .035; mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .vignette {
+    position: fixed; inset: 0; pointer-events: none; z-index: 1;
+    background: radial-gradient(ellipse at 50% 50%, transparent 20%, rgba(0,0,0,0.85) 100%);
+  }
+  .glass {
+    background: rgba(0,0,0,.45);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255,255,255,.08);
+  }
+  .hero-glow {
+    background: radial-gradient(circle at 50% 50%, rgba(124,135,151,.08) 0%, transparent 65%);
+  }
+
+  /* Header Glow Animasyonu */
+  @keyframes headerPulseGlow {
+    0% { border-color: rgba(255,255,255, 0.08); box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); }
+    100% { border-color: rgba(255,255,255, 0.35); box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5), 0 0 20px rgba(255,255,255,0.15), inset 0 0 10px rgba(255,255,255,0.08); }
+  }
+  @keyframes riseIn {
+    from { opacity: 0; transform: translateY(-14px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .header-auto-glow {
+    animation: riseIn 1.4s cubic-bezier(.22,1,.36,1) both, headerPulseGlow 2s ease-in-out infinite alternate 3.5s both;
+  }
+
+  /* Nefes Küresi Çember Geçişi */
+  #breath-orb {
+    transition: transform 4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 4s ease, border-color 4s ease;
+  }
+</style>
+</head>
+<body class="text-zinc-400 antialiased relative h-[100dvh]">
+
+<div class="grain"></div>
+<div class="vignette"></div>
+
+<!-- HEADER (Ters Yerleşim) -->
+<header class="fixed top-6 left-0 right-0 mx-auto z-50 glass rounded-full px-6 py-3 w-[90%] sm:w-11/12 max-w-3xl flex items-center justify-between header-auto-glow">
+  <!-- Sol: Geri Dön -->
+  <a href="index.html" class="flex items-center gap-2 text-xs text-zinc-300 hover:text-white transition-colors group">
+    <svg class="w-4 h-4 transform group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+    </svg>
+    Geri Dön
+  </a>
+  <!-- Sağ: Logo -->
+  <div class="flex flex-col justify-center items-end text-right cursor-default">
+    <span class="font-serif-display text-lg italic leading-none text-zinc-100 transition-colors">overthink</span>
+    <span class="font-sans text-[10px] font-semibold tracking-[0.2em] text-zinc-500 uppercase mt-0.5 transition-colors">tools</span>
+  </div>
+</header>
+
+<!-- ZİHİN SAKİNLEŞTİRİCİ MERKEZ ALANI -->
+<main class="relative h-[100dvh] w-full flex flex-col items-center justify-center px-6 hero-glow z-10">
+  
+  <!-- Teknik Seçim Sekmeleri (Üstte) -->
+  <div class="flex items-center gap-2 glass p-1.5 rounded-full mb-10 sm:mb-12 border border-white/10 text-xs">
+    <button data-technique="box" class="technique-btn px-4 py-1.5 rounded-full text-zinc-200 bg-white/10 transition-all">
+      Kutu Nefesi (4-4-4-4)
+    </button>
+    <button data-technique="478" class="technique-btn px-4 py-1.5 rounded-full text-zinc-400 hover:text-zinc-200 transition-all">
+      4-7-8 Rahatlama
+    </button>
+    <button data-technique="calm" class="technique-btn px-4 py-1.5 rounded-full text-zinc-400 hover:text-zinc-200 transition-all">
+      Sakinlik (4-6)
+    </button>
+  </div>
+
+  <!-- Nefes Odak Küresi (Orb) -->
+  <div class="relative flex items-center justify-center mb-10 sm:mb-12">
+    <!-- Dış Halka Işıltısı -->
+    <div id="breath-glow" class="absolute w-56 h-56 sm:w-64 sm:h-64 rounded-full bg-white/5 blur-2xl transition-all duration-1000 scale-75 opacity-50"></div>
+    
+    <!-- Ana Büyüyen / Küçülen Cam Küre -->
+    <div id="breath-orb" class="relative w-48 h-48 sm:w-56 sm:h-56 rounded-full glass border border-white/15 flex flex-col items-center justify-center shadow-2xl scale-75">
+      <!-- Durum Başlığı -->
+      <span id="breath-phase" class="font-serif-display text-xl sm:text-2xl text-zinc-100 font-light italic tracking-wide transition-opacity duration-300">
+        Hazır mısın?
+      </span>
+      <!-- Geri Sayım Sayısı -->
+      <span id="breath-count" class="font-sans text-3xl sm:text-4xl text-zinc-300 font-light mt-1">
+        -
+      </span>
+    </div>
+  </div>
+
+  <!-- Kontroller & Döngü Sayacı -->
+  <div class="flex flex-col items-center gap-4">
+    <!-- Başlat / Durdur Butonu -->
+    <button id="toggle-btn" class="w-12 h-12 flex items-center justify-center bg-white text-black hover:bg-zinc-200 rounded-full transition-all shadow-xl shadow-white/10 transform active:scale-95">
+      <!-- Play İkonu -->
+      <svg id="play-icon" class="w-5 h-5 fill-currentColor ml-0.5" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+      <!-- Pause İkonu -->
+      <svg id="pause-icon" class="w-5 h-5 fill-currentColor hidden" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+    </button>
+
+    <!-- Döngü Bilgisi -->
+    <p id="cycle-display" class="text-xs text-zinc-500 tracking-wider font-light">
+      Tamamlanan Döngü: <span id="cycle-count" class="text-zinc-300">0</span>
+    </p>
+  </div>
+
+</main>
+
+<script>
+  // 1. Teknik Veri Modelleri
+  const techniques = {
+    'box': {
+      name: 'Kutu Nefesi',
+      phases: [
+        { name: 'Nefes Al', duration: 4, scale: 1.25, glow: 1 },
+        { name: 'Tut', duration: 4, scale: 1.25, glow: 0.8 },
+        { name: 'Nefes Ver', duration: 4, scale: 0.75, glow: 0.3 },
+        { name: 'Bekle', duration: 4, scale: 0.75, glow: 0.2 }
+      ]
+    },
+    '478': {
+      name: '4-7-8 Rahatlama',
+      phases: [
+        { name: 'Nefes Al', duration: 4, scale: 1.3, glow: 1 },
+        { name: 'Tut', duration: 7, scale: 1.3, glow: 0.8 },
+        { name: 'Nefes Ver', duration: 8, scale: 0.75, glow: 0.2 }
+      ]
+    },
+    'calm': {
+      name: 'Sakinlik (4-6)',
+      phases: [
+        { name: 'Nefes Al', duration: 4, scale: 1.25, glow: 1 },
+        { name: 'Nefes Ver', duration: 6, scale: 0.75, glow: 0.2 }
+      ]
+    }
+  };
+
+  let currentTechnique = 'box';
+  let isRunning = false;
+  let currentPhaseIndex = 0;
+  let remainingSeconds = 0;
+  let completedCycles = 0;
+  let timerInterval = null;
+
+  // 2. DOM Elemanları
+  const orb = document.getElementById('breath-orb');
+  const glow = document.getElementById('breath-glow');
+  const phaseEl = document.getElementById('breath-phase');
+  const countEl = document.getElementById('breath-count');
+  const toggleBtn = document.getElementById('toggle-btn');
+  const playIcon = document.getElementById('play-icon');
+  const pauseIcon = document.getElementById('pause-icon');
+  const cycleCountEl = document.getElementById('cycle-count');
+  const techniqueBtns = document.querySelectorAll('.technique-btn');
+
+  // 3. Teknik Değiştirme
+  techniqueBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const tech = btn.dataset.technique;
+      if (tech === currentTechnique) return;
+
+      currentTechnique = tech;
+      
+      // Buton Stillerini Güncelle
+      techniqueBtns.forEach(b => {
+        b.classList.remove('bg-white/10', 'text-zinc-200');
+        b.classList.add('text-zinc-400');
+      });
+      btn.classList.add('bg-white/10', 'text-zinc-200');
+      btn.classList.remove('text-zinc-400');
+
+      // Sıfırla
+      stopExercise();
+    });
+  });
+
+  // 4. Egzersiz Mantığı
+  function startExercise() {
+    isRunning = true;
+    playIcon.classList.add('hidden');
+    pauseIcon.classList.remove('hidden');
+    
+    currentPhaseIndex = 0;
+    runPhase();
+  }
+
+  function stopExercise() {
+    isRunning = false;
+    clearInterval(timerInterval);
+    playIcon.classList.remove('hidden');
+    pauseIcon.classList.add('hidden');
+    
+    // Küreyi başlangıç konumuna al
+    orb.style.transition = 'transform 1s ease, box-shadow 1s ease';
+    orb.style.transform = 'scale(0.75)';
+    glow.style.transform = 'scale(0.75)';
+    glow.style.opacity = '0.5';
+    phaseEl.textContent = 'Hazır mısın?';
+    countEl.textContent = '-';
+  }
+
+  function runPhase() {
+    if (!isRunning) return;
+
+    const tech = techniques[currentTechnique];
+    const phase = tech.phases[currentPhaseIndex];
+    
+    remainingSeconds = phase.duration;
+
+    // Küre ve Glow Animasyonunu Faz Süresine Göre Ayarla
+    orb.style.transition = `transform ${phase.duration}s cubic-bezier(0.4, 0, 0.2, 1), box-shadow ${phase.duration}s ease, border-color ${phase.duration}s ease`;
+    orb.style.transform = `scale(${phase.scale})`;
+    
+    glow.style.transition = `transform ${phase.duration}s cubic-bezier(0.4, 0, 0.2, 1), opacity ${phase.duration}s ease`;
+    glow.style.transform = `scale(${phase.scale * 1.1})`;
+    glow.style.opacity = phase.glow;
+
+    phaseEl.textContent = phase.name;
+    countEl.textContent = remainingSeconds;
+
+    clearInterval(timerInterval);
+    timerInterval = setInterval(() => {
+      remainingSeconds--;
+      
+      if (remainingSeconds > 0) {
+        countEl.textContent = remainingSeconds;
+      } else {
+        clearInterval(timerInterval);
+        
+        // Bir sonraki faza geç
+        currentPhaseIndex++;
+        if (currentPhaseIndex >= tech.phases.length) {
+          currentPhaseIndex = 0;
+          completedCycles++;
+          cycleCountEl.textContent = completedCycles;
+        }
+        
+        runPhase();
+      }
+    }, 1000);
+  }
+
+  // 5. Başlat / Durdur Tetikleyici
+  toggleBtn.addEventListener('click', () => {
+    if (isRunning) {
+      stopExercise();
+    } else {
+      startExercise();
+    }
+  });
+
+</script>
+</body>
+</html>

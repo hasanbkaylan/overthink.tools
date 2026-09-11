@@ -22,7 +22,6 @@
     -webkit-user-drag: none; 
   }
   
-  /* Form elemanları için istisna */
   input, textarea, [contenteditable="true"] {
     -webkit-user-select: auto;
     -ms-user-select: auto;
@@ -70,7 +69,7 @@
   .rise-in-delay{ animation:riseIn 1.4s cubic-bezier(.22,1,.36,1) .35s both; }
   .rise-in-delay-2{ animation:riseIn 1.4s cubic-bezier(.22,1,.36,1) .70s both; }
 
-  /* Header 3-4 Saniye Sonra Başlayan Animasyonu */
+  /* Header Glow Animasyonu */
   @keyframes headerPulseGlow {
     0% {
       border-color: rgba(255,255,255, 0.08);
@@ -88,7 +87,7 @@
       headerPulseGlow 2s ease-in-out infinite alternate 3.5s both;
   }
 
-  /* Kart Geçişleri ve Parlama Animasyonu */
+  /* Kart Parlama Efekti */
   .card-tool{ 
     transition:transform .4s ease, border-color .4s ease, background-color .4s ease; 
   }
@@ -131,7 +130,6 @@
   <a href="#tools" class="hidden sm:inline-flex items-center gap-2 text-xs text-zinc-200 border border-white/10 bg-white/5 hover:bg-white/10 rounded-full px-4 py-2 transition-all hover:border-white/20">
     Hemen Başla
   </a>
-  <!-- Mobil Menü Butonu -->
   <a href="#tools" class="sm:hidden text-xs text-zinc-300 border border-white/10 rounded-full px-4 py-1.5 hover:bg-white/10 transition-colors">Menü</a>
 </header>
 
@@ -170,13 +168,15 @@
 
 <!-- TOOLS -->
 <section id="tools" class="relative min-h-[100dvh] px-6 pt-28 pb-16 flex flex-col justify-center snap-start shrink-0">
-  <div class="max-w-5xl mx-auto w-full">
+  <div class="max-w-6xl mx-auto w-full">
     <h2 class="font-serif-display text-lg sm:text-xl text-zinc-200 font-light mb-10 text-center">
       Kendine ayırabileceğin küçük alanlar
     </h2>
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+    
+    <!-- 3'lü Düzen -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
       
-      <!-- Tool 1 -->
+      <!-- Tool 1: Overthink Ambiyansı -->
       <div class="card-tool glass rounded-2xl p-7 flex flex-col justify-between">
         <div>
           <h3 class="text-zinc-100 text-base font-medium mb-2">Overthink Ambiyansı</h3>
@@ -184,10 +184,12 @@
             Yağmurlu gece manzaraları ve arka planda hüzünlü overthink müzikleri eşliğinde biraz uzaklaş.
           </p>
         </div>
-        <a href="#" class="mt-6 inline-flex items-center gap-2 text-sm text-zinc-300 hover:text-white transition-colors w-fit border-b border-white/10 hover:border-white/50 pb-0.5">Araca Git</a>
+        <a href="overthink-ambiyansi.html" onclick="event.preventDefault(); window.scrollTo({top: 0, behavior: 'smooth'}); setTimeout(() => window.location.href = 'overthink-ambiyansi.html', 800);" class="mt-6 inline-flex items-center gap-2 text-sm text-zinc-300 hover:text-white transition-colors w-fit border-b border-white/10 hover:border-white/50 pb-0.5">
+          Araca Git
+        </a>
       </div>
 
-      <!-- Tool 2 (Sessiz Duvar) -->
+      <!-- Tool 2: Sessiz Duvar -->
       <div class="card-tool glass rounded-2xl p-7 flex flex-col justify-between">
         <div>
           <h3 class="text-zinc-100 text-base font-medium mb-2">Sessiz Duvar</h3>
@@ -195,24 +197,12 @@
             Düşüncelerini yaz, ekrana bırak ve yavaşça toza dönüşmelerini izle. Kimse okumayacak.
           </p>
         </div>
-        <!-- Kaydırma + Yönlendirme Efekti Burada -->
         <a href="sessiz-duvar.html" onclick="event.preventDefault(); window.scrollTo({top: 0, behavior: 'smooth'}); setTimeout(() => window.location.href = 'sessiz-duvar.html', 800);" class="mt-6 inline-flex items-center gap-2 text-sm text-zinc-300 hover:text-white transition-colors w-fit border-b border-white/10 hover:border-white/50 pb-0.5">
           Başlat
         </a>
       </div>
 
-      <!-- Tool 3 -->
-      <div class="card-tool glass rounded-2xl p-7 flex flex-col justify-between">
-        <div>
-          <h3 class="text-zinc-100 text-base font-medium mb-2">Ortam Sesleri Mixeri</h3>
-          <p class="text-sm text-zinc-500 leading-relaxed font-light">
-            Yağmur, rüzgar ve gece seslerini kendi sessizliğine göre harmanla.
-          </p>
-        </div>
-        <a href="#" class="mt-6 inline-flex items-center gap-2 text-sm text-zinc-300 hover:text-white transition-colors w-fit border-b border-white/10 hover:border-white/50 pb-0.5">Araca Git</a>
-      </div>
-
-      <!-- Tool 4 -->
+      <!-- Tool 3: Zihin Sakinleştirici -->
       <div class="card-tool glass rounded-2xl p-7 flex flex-col justify-between">
         <div>
           <h3 class="text-zinc-100 text-base font-medium mb-2">Zihin Sakinleştirici</h3>
@@ -220,7 +210,9 @@
             Ritimli bir nefes egzersizi ile birkaç dakikalığına yalnızca nefesine odaklan.
           </p>
         </div>
-        <a href="#" class="mt-6 inline-flex items-center gap-2 text-sm text-zinc-300 hover:text-white transition-colors w-fit border-b border-white/10 hover:border-white/50 pb-0.5">Başlat</a>
+        <a href="zihin-sakinlestirici.html" onclick="event.preventDefault(); window.scrollTo({top: 0, behavior: 'smooth'}); setTimeout(() => window.location.href = 'zihin-sakinlestirici.html', 800);" class="mt-6 inline-flex items-center gap-2 text-sm text-zinc-300 hover:text-white transition-colors w-fit border-b border-white/10 hover:border-white/50 pb-0.5">
+          Başlat
+        </a>
       </div>
 
     </div>
