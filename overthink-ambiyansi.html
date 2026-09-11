@@ -58,8 +58,8 @@
 <div class="vignette"></div>
 <div class="grain"></div>
 
-<!-- GÖRÜNMEZ YOUTUBE OYNATICI -->
-<div id="yt-player-container" class="hidden"></div>
+<!-- GÖRÜNMEZ YOUTUBE OYNATICI (display:none yerine ekran dışına alındı) -->
+<div id="yt-player-container" style="position:fixed; top:-9999px; left:-9999px; width:200px; height:200px; opacity:0; pointer-events:none;"></div>
 
 <!-- 2. KONTROL EDİLEBİLİR ARAYÜZ KATMANI (UI) -->
 <div id="ui-layer" class="fixed inset-0 z-10 flex flex-col justify-between transition-opacity duration-700 ease-in-out">
@@ -99,7 +99,7 @@
     </button>
   </div>
 
-  <!-- Alt: Kompakt & Yüksek Kontrastlı Müzik Çalar Kapsülü -->
+  <!-- Alt: Kompakt & Yüksek Kontrastlı Müzik Çaler Kapsülü -->
   <div class="w-full pb-8 px-4 flex justify-center">
     <div class="glass rounded-full px-5 sm:px-7 py-3 flex items-center justify-between gap-4 sm:gap-6 shadow-2xl border border-white/10 max-w-lg w-full">
       
@@ -143,7 +143,7 @@
 
 </div>
 
-<!-- YOUTUBE IFRAME API VE MANTIK -->
+<!-- YOUTUBE API & PLAYER LOGIC -->
 <script>
   // 1. Manzara Videoları Listesi
   const videos = [
@@ -152,7 +152,7 @@
   ];
   let currentVideoIndex = 0;
 
-  // 2. Müzik Playlisti
+  // 2. Güncellenmiş Müzik Playlisti
   const playlist = [
     { title: "Kalben - Yara", id: "kmwLour0wLQ" },
     { title: "Lessio - yenildiğim tek savaştın", id: "K2-QZ-hEU9Y" },
@@ -207,18 +207,24 @@
   const videoNextBtn = document.getElementById('video-next-btn');
   const videoPrevBtn = document.getElementById('video-prev-btn');
 
-  // Arka Plan Videosunu Yükleme ve Değiştirme
+  // Başlığı sayfa açılır açılmaz anında yazdırıyoruz
+  function updateTrackInfo() {
+    trackNameEl.textContent = playlist[currentTrackIndex].title;
+  }
+  updateTrackInfo();
+
+  // Arka Plan Videosunu Yükleme
   function loadVideo(index) {
     bgVideo.style.opacity = 0;
     setTimeout(() => {
       bgVideo.src = videos[index];
-      bgVideo.play().catch(e => console.log("Video auto-play engellendi."));
+      bgVideo.play().catch(e => console.log("Video auto-play bekleniyor."));
       bgVideo.style.opacity = 1;
     }, 400);
   }
   loadVideo(currentVideoIndex);
 
-  // Video Butonları Dinleyicileri (Müzikten bağımsız)
+  // Video Değiştirme Butonları
   videoNextBtn.addEventListener('click', (e) => {
     e.stopPropagation();
     currentVideoIndex = (currentVideoIndex + 1) % videos.length;
@@ -231,85 +237,97 @@
     loadVideo(currentVideoIndex);
   });
 
-  // 4. Reklamsız / Nocookie YouTube API Entegrasyonu
-  let player;
+  // 4. YouTube API Entegrasyonu (Hızlı ve Hatasız)
+  let player = null;
+  let isPlaying = false;
+
   const tag = document.createElement('script');
-  // Reklam ve izleme azaltılmış nocookie API adresi
-  tag.src = "https://www.youtube-nocookie.com/iframe_api";
+  tag.src = "https://www.youtube.com/iframe_api";
   const firstScriptTag = document.getElementsByTagName('script')[0];
   firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-  function onYouTubeIframeAPIReady() {
+  window.onYouTubeIframeAPIReady = function() {
     player = new YT.Player('yt-player-container', {
-      height: '0',
-      width: '0',
+      height: '200',
+      width: '200',
       videoId: playlist[currentTrackIndex].id,
       playerVars: {
         'autoplay': 0,
         'controls': 0,
         'disablekb': 1,
+        'fs': 0,
+        'iv_load_policy': 3,
         'modestbranding': 1,
         'rel': 0,
-        'showinfo': 0,
-        'iv_load_policy': 3,
-        'fs': 0,
-        'playsinline': 1,
-        'enablejsapi': 1,
-        'origin': window.location.origin
+        'playsinline': 1
       },
       events: {
         'onReady': onPlayerReady,
-        'onStateChange': onPlayerStateChange
+        'onStateChange': onPlayerStateChange,
+        'onError': onPlayerError
       }
     });
-  }
+  };
 
   function onPlayerReady(event) {
     updateTrackInfo();
   }
 
   function onPlayerStateChange(event) {
-    if (event.data === 0) { // Şarkı bittiğinde
+    // Şarkı bittiğinde sonrakine geç (0 = ENDED)
+    if (event.data === 0) {
       nextTrack();
     }
-  }
-
-  function updateTrackInfo() {
-    trackNameEl.textContent = playlist[currentTrackIndex].title;
-  }
-
-  // Müzik Oynat / Durdur
-  let isPlaying = false;
-  function togglePlay() {
-    if(!player || !player.getPlayerState) return;
-    
-    if (isPlaying) {
-      player.pauseVideo();
-      iconPlay.classList.remove('hidden');
-      iconPause.classList.add('hidden');
-    } else {
-      player.playVideo();
+    // Şarkı çalmaya başladığında ikonları senkronize et (1 = PLAYING)
+    else if (event.data === 1) {
+      isPlaying = true;
       iconPlay.classList.add('hidden');
       iconPause.classList.remove('hidden');
     }
-    isPlaying = !isPlaying;
+    // Şarkı duraklatıldığında (2 = PAUSED)
+    else if (event.data === 2) {
+      isPlaying = false;
+      iconPlay.classList.remove('hidden');
+      iconPause.classList.add('hidden');
+    }
+  }
+
+  // Eğer video engelliyse veya teliften açılmazsa takılma, sonrakine geç
+  function onPlayerError(event) {
+    console.warn("Şarkı açılamadı, bir sonrakine geçiliyor...", event);
+    nextTrack();
+  }
+
+  // Oynat / Durdur
+  function togglePlay() {
+    if(!player || typeof player.playVideo !== 'function') return;
+    
+    if (isPlaying) {
+      player.pauseVideo();
+    } else {
+      player.playVideo();
+    }
   }
 
   function nextTrack() {
     currentTrackIndex = (currentTrackIndex + 1) % playlist.length;
-    player.loadVideoById(playlist[currentTrackIndex].id);
     updateTrackInfo();
-    if(!isPlaying) togglePlay();
+    if(player && typeof player.loadVideoById === 'function') {
+      player.loadVideoById(playlist[currentTrackIndex].id);
+      player.playVideo();
+    }
   }
 
   function prevTrack() {
     currentTrackIndex = (currentTrackIndex - 1 + playlist.length) % playlist.length;
-    player.loadVideoById(playlist[currentTrackIndex].id);
     updateTrackInfo();
-    if(!isPlaying) togglePlay();
+    if(player && typeof player.loadVideoById === 'function') {
+      player.loadVideoById(playlist[currentTrackIndex].id);
+      player.playVideo();
+    }
   }
 
-  // Şarkı Butonları Dinleyicileri
+  // Şarkı Kontrol Butonları Dinleyicileri
   playPauseBtn.addEventListener('click', (e) => {
     e.stopPropagation();
     togglePlay();
