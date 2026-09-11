@@ -58,10 +58,10 @@
 <div class="vignette"></div>
 <div class="grain"></div>
 
-<!-- GÖRÜNMEZ YOUTUBE OYNATICI -->
-<div id="yt-player-container" style="position:fixed; top:-9999px; left:-9999px; width:200px; height:200px; opacity:0; pointer-events:none;"></div>
+<!-- 2. SAF HTML5 MP3 OYNATICI (REKLAMSIZ) -->
+<audio id="audio-player" preload="auto"></audio>
 
-<!-- 2. KONTROL EDİLEBİLİR ARAYÜZ KATMANI (UI) -->
+<!-- 3. KONTROL EDİLEBİLİR ARAYÜZ KATMANI (UI) -->
 <div id="ui-layer" class="fixed inset-0 z-10 flex flex-col justify-between transition-opacity duration-700 ease-in-out">
   
   <!-- Üst Menü (Geri Dön & Odağı Temizle) -->
@@ -121,18 +121,18 @@
       <!-- Sağ: Bembeyaz & Dairesel Buton Grubu -->
       <div class="flex items-center gap-2 sm:gap-3 shrink-0">
         
-        <!-- Önceki Şarkı (Beyaz Yuvarlak Buton) -->
+        <!-- Önceki Şarkı -->
         <button id="prev-btn" title="Önceki Şarkı" class="w-9 h-9 flex items-center justify-center bg-white text-black hover:bg-zinc-200 rounded-full transition-all shadow-md shadow-white/10 transform active:scale-95">
           <svg class="w-3.5 h-3.5 fill-currentColor" viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
         </button>
 
-        <!-- Oynat / Durdur (Daha Büyük Beyaz Yuvarlak Buton) -->
+        <!-- Oynat / Durdur -->
         <button id="play-pause-btn" title="Oynat/Durdur" class="w-11 h-11 flex items-center justify-center bg-white text-black hover:bg-zinc-200 rounded-full transition-all shadow-lg shadow-white/20 transform active:scale-95">
           <svg id="icon-play" class="w-4 h-4 fill-currentColor ml-0.5" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
           <svg id="icon-pause" class="w-4 h-4 fill-currentColor hidden" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
         </button>
 
-        <!-- Sonraki Şarkı (Beyaz Yuvarlak Buton) -->
+        <!-- Sonraki Şarkı -->
         <button id="next-btn" title="Sonraki Şarkı" class="w-9 h-9 flex items-center justify-center bg-white text-black hover:bg-zinc-200 rounded-full transition-all shadow-md shadow-white/10 transform active:scale-95">
           <svg class="w-3.5 h-3.5 fill-currentColor" viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
         </button>
@@ -143,7 +143,7 @@
 
 </div>
 
-<!-- YOUTUBE PLAYLIST & PLAYER LOGIC -->
+<!-- SES VE VİDEO YÖNETİMİ -->
 <script>
   // 1. Manzara Videoları Listesi
   const videos = [
@@ -152,50 +152,57 @@
   ];
   let currentVideoIndex = 0;
 
-  // 2. Müzik Playlisti
-  const playlist = [
-    { title: "Kalben - Yara", id: "kmwLour0wLQ" },
-    { title: "Lessio - yenildiğim tek savaştın", id: "K2-QZ-hEU9Y" },
-    { title: "Aydın Kurtoğlu - Hayırlı Günler", id: "1eJG7lRkyi8" },
-    { title: "Yüzyüzeyken Konuşuruz - Dinle Beni Bi'", id: "xlw8sDFpG5E" },
-    { title: "Pilli Bebek - Bak", id: "89bkNGTy6W4" },
-    { title: "Dominic Fike - Babydoll", id: "UnuEzP1rDLY" },
-    { title: "Serkan Nişancı - Eller Üzer", id: "Q5v3aQ_6sgI" },
-    { title: "Lin Pesto - Maazallah", id: "YCe7kmYUhJs" },
-    { title: "Yüzyüzeyken Konuşuruz - Boş Gemiler", id: "Cy-Vd0lXse4" },
-    { title: "Bahadır Tatlıöz - Aşkın Ertesi", id: "rJvw_cDil-4" },
-    { title: "Emre Fel - Bir Güldün", id: "gVDPI0_5rRU" },
-    { title: "Yaşlı Amca - Ve Ben", id: "IAlkGGb6dSk" },
-    { title: "Ünlü - Rüya", id: "GyMDekeZIi8" },
-    { title: "Yaşlı Amca - İstanbul Beyefendisi", id: "1MIaqvJ8m9E" },
-    { title: "Mavi Işıklar - Ankara Rüzgarı", id: "un_SpHUxfq4" },
-    { title: "Yüzyüzeyken Konuşuruz - Sen Varsın Diye", id: "JnFOgqAGIYg" },
-    { title: "mor ve ötesi - Cambaz", id: "TpfTu5l5EyY" },
-    { title: "Kirli - Ah Aman Aman", id: "sp1A7uWfGMo" },
-    { title: "Oğuzhan Koç - Ayy / Ben Hala Rüyada", id: "Z6adfl44qCI" },
-    { title: "Oğuzhan Koç - Yüzük", id: "X9TMWrhStGY" },
-    { title: "Şekersiz - imkansız bir aşk denir", id: "zJlv75njl0o" },
-    { title: "Wegh - TUZAK", id: "-xXEYGRKHPA" },
-    { title: "Kalben - Sakin Ol Evladım", id: "nWvqtLCdLRY" },
-    { title: "Kubilay Karça - Ayaza Serdim", id: "FmAIghrEHik" },
-    { title: "Pinhani - Hele Bi Gel", id: "uq5QVOY_wmc" },
-    { title: "Gökhan Türkmen - Ben Unuturum", id: "I11NP-sI23k" },
-    { title: "Blok3 - Sebebi Yar", id: "WQvqf1lLQws" },
-    { title: "Yaşlı Amca - Giderdi Hoşuma", id: "K1ludzYvSXg" },
-    { title: "Sakiler - Aşığın Kaderi", id: "d0W4172Sjk8" },
-    { title: "Candan Erçetin - Yalan", id: "VdhJxs8ewxg" },
-    { title: "Duman - Her Şeyi Yak", id: "JQhVutggvvE" },
-    { title: "Kalben - Düşünürüm", id: "RkIdKzzF9J8" },
-    { title: "Yalın - Keşke", id: "ZaqF3hs5OiA" },
-    { title: "Elif Buse Doğan - Yangın Yeri", id: "Z8e121pTmjU" },
-    { title: "Ersay Üner - Selam", id: "IEJMzZcHmt8" },
-    { title: "Adamlar - Sarılırım Birine", id: "GnjRrfFRMf0" },
-    { title: "Yalın - Ki Sen", id: "dCUJigjlqMo" }
-  ];
+  // 2. Yedek MP3 Playlisti (GitHub deposundaki dosya adlarıyla tam uyumlu)
+  const RAW_BASE_URL = 'https://raw.githubusercontent.com/hasanbkaylan-web/overthink.tools-audio/main/audios/';
+  
+  let playlist = [
+    "Kalben - Yara",
+    "Lessio - yenildiğim tek savaştın",
+    "Aydın Kurtoğlu - Hayırlı Günler",
+    "Yüzyüzeyken Konuşuruz - Dinle Beni Bi'",
+    "Pilli Bebek - Bak",
+    "Dominic Fike - Babydoll",
+    "Serkan Nişancı - Eller Üzer",
+    "Lin Pesto - Maazallah",
+    "Yüzyüzeyken Konuşuruz - Boş Gemiler",
+    "Bahadır Tatlıöz - Aşkın Ertesi",
+    "Emre Fel - Bir Güldün",
+    "Yaşlı Amca - Ve Ben",
+    "Ünlü - Rüya",
+    "Yaşlı Amca - İstanbul Beyefendisi",
+    "Mavi Işıklar - Ankara Rüzgarı",
+    "Yüzyüzeyken Konuşuruz - Sen Varsın Diye",
+    "mor ve ötesi - Cambaz",
+    "Kirli - Ah Aman Aman",
+    "Oğuzhan Koç - Ayy  Ben Hala Rüyada",
+    "Oğuzhan Koç - Yüzük",
+    "Şekersiz - imkansız bir aşk denir",
+    "Wegh - TUZAK",
+    "Kalben - Sakin Ol Evladım",
+    "Kubilay Karça - Ayaza Serdim",
+    "Pinhani - Hele Bi Gel",
+    "Gökhan Türkmen - Ben Unuturum",
+    "Blok3 - Sebebi Yar",
+    "Yaşlı Amca - Giderdi Hoşuma",
+    "Sakiler - Aşığın Kaderi",
+    "Candan Erçetin - Yalan",
+    "Duman - Her Şeyi Yak",
+    "Kalben - Düşünürüm",
+    "Yalın - Keşke",
+    "Elif Buse Doğan - Yangın Yeri",
+    "Ersay Üner - Selam",
+    "Adamlar - Sarılırım Birine",
+    "Yalın - Ki Sen"
+  ].map(title => ({
+    title: title,
+    url: RAW_BASE_URL + encodeURIComponent(title + '.mp3')
+  }));
+
   let currentTrackIndex = 0;
 
   // 3. DOM Elemanları
   const bgVideo = document.getElementById('bg-video');
+  const audio = document.getElementById('audio-player');
   const trackNameEl = document.getElementById('track-name');
   const playPauseBtn = document.getElementById('play-pause-btn');
   const nextBtn = document.getElementById('next-btn');
@@ -207,22 +214,58 @@
   const videoNextBtn = document.getElementById('video-next-btn');
   const videoPrevBtn = document.getElementById('video-prev-btn');
 
+  // Şarkı İsmini Güncelle
   function updateTrackInfo() {
-    trackNameEl.textContent = playlist[currentTrackIndex].title;
+    if(playlist[currentTrackIndex]) {
+      trackNameEl.textContent = playlist[currentTrackIndex].title;
+    }
   }
+
+  // Şarkıyı Yükle
+  function loadTrack(index) {
+    if (!playlist[index]) return;
+    audio.src = playlist[index].url;
+    updateTrackInfo();
+  }
+
+  // 4. GitHub API ile Depodan Dosyaları Otomatik Çekme (Dinamik)
+  async function syncFromGitHub() {
+    try {
+      const res = await fetch('https://api.github.com/repos/hasanbkaylan-web/overthink.tools-audio/contents/audios');
+      if (res.ok) {
+        const files = await res.json();
+        const mp3s = files.filter(f => f.name.toLowerCase().endsWith('.mp3'));
+        if (mp3s.length > 0) {
+          playlist = mp3s.map(f => ({
+            title: decodeURIComponent(f.name.replace(/\.[^/.]+$/, "")),
+            url: f.download_url
+          }));
+          updateTrackInfo();
+          loadTrack(currentTrackIndex);
+        }
+      }
+    } catch (e) {
+      console.log("GitHub dinamik senkronizasyon pas geçildi, yerel liste devrede.");
+    }
+  }
+
+  // İlk Yükleme
   updateTrackInfo();
+  loadTrack(currentTrackIndex);
+  syncFromGitHub();
 
   // Arka Plan Videosunu Yükleme
   function loadVideo(index) {
     bgVideo.style.opacity = 0;
     setTimeout(() => {
       bgVideo.src = videos[index];
-      bgVideo.play().catch(e => console.log("Video bekleniyor."));
+      bgVideo.play().catch(() => {});
       bgVideo.style.opacity = 1;
     }, 400);
   }
   loadVideo(currentVideoIndex);
 
+  // Video Butonları
   videoNextBtn.addEventListener('click', (e) => {
     e.stopPropagation();
     currentVideoIndex = (currentVideoIndex + 1) % videos.length;
@@ -235,105 +278,45 @@
     loadVideo(currentVideoIndex);
   });
 
-  // 4. Reklamsız Dahili Playlist Yapılandırması
-  let player = null;
-  let isPlaying = false;
-
-  const tag = document.createElement('script');
-  tag.src = "https://www.youtube.com/iframe_api";
-  const firstScriptTag = document.getElementsByTagName('script')[0];
-  firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
-  window.onYouTubeIframeAPIReady = function() {
-    // Tüm şarkı ID'lerini tek bir kuyrukta birleştiriyoruz
-    const videoIdList = playlist.map(item => item.id).join(',');
-
-    player = new YT.Player('yt-player-container', {
-      height: '200',
-      width: '200',
-      playerVars: {
-        'autoplay': 0,
-        'controls': 0,
-        'disablekb': 1,
-        'fs': 0,
-        'iv_load_policy': 3,
-        'modestbranding': 1,
-        'rel': 0,
-        'playsinline': 1,
-        'playlist': videoIdList // Dahili playlist olarak başlatılır
-      },
-      events: {
-        'onReady': onPlayerReady,
-        'onStateChange': onPlayerStateChange,
-        'onError': onPlayerError
-      }
-    });
-  };
-
-  function onPlayerReady(event) {
-    updateTrackInfo();
-  }
-
-  function onPlayerStateChange(event) {
-    // YouTube dahili olarak şarkı değiştirdiğinde indeksi senkronize et
-    if (player && typeof player.getPlaylistIndex === 'function') {
-      const idx = player.getPlaylistIndex();
-      if (idx !== -1 && idx !== currentTrackIndex) {
-        currentTrackIndex = idx;
-        updateTrackInfo();
-      }
-    }
-
-    // Şarkı bittiğinde sıradakine geç
-    if (event.data === 0) {
-      nextTrack();
-    }
-    // Çalıyor
-    else if (event.data === 1) {
-      isPlaying = true;
-      iconPlay.classList.add('hidden');
-      iconPause.classList.remove('hidden');
-    }
-    // Duraklatıldı
-    else if (event.data === 2) {
-      isPlaying = false;
-      iconPlay.classList.remove('hidden');
-      iconPause.classList.add('hidden');
-    }
-  }
-
-  function onPlayerError(event) {
-    console.warn("Şarkı atlandı:", event);
-    nextTrack();
-  }
-
-  // Oynat / Durdur
+  // 5. Oynatma & Durdurma Mantığı
   function togglePlay() {
-    if(!player) return;
-    
-    if (isPlaying) {
-      player.pauseVideo();
+    if (audio.paused) {
+      audio.play().catch(e => console.log("Otomatik çalma tarayıcı tarafından engellendi:", e));
     } else {
-      player.playVideo();
+      audio.pause();
     }
   }
 
-  // Reklamsız Dahili İndeks Geçişi
   function nextTrack() {
     currentTrackIndex = (currentTrackIndex + 1) % playlist.length;
-    updateTrackInfo();
-    if(player && typeof player.playVideoAt === 'function') {
-      player.playVideoAt(currentTrackIndex);
+    const wasPlaying = !audio.paused;
+    loadTrack(currentTrackIndex);
+    if (wasPlaying || true) {
+      audio.play().catch(() => {});
     }
   }
 
   function prevTrack() {
     currentTrackIndex = (currentTrackIndex - 1 + playlist.length) % playlist.length;
-    updateTrackInfo();
-    if(player && typeof player.playVideoAt === 'function') {
-      player.playVideoAt(currentTrackIndex);
-    }
+    loadTrack(currentTrackIndex);
+    audio.play().catch(() => {});
   }
+
+  // Ses Durumu Dinleyicileri (İkonları Güncelle)
+  audio.addEventListener('play', () => {
+    iconPlay.classList.add('hidden');
+    iconPause.classList.remove('hidden');
+  });
+
+  audio.addEventListener('pause', () => {
+    iconPlay.classList.remove('hidden');
+    iconPause.classList.add('hidden');
+  });
+
+  // Şarkı Bittiğinde Otomatik Sıradakine Geç
+  audio.addEventListener('ended', () => {
+    nextTrack();
+  });
 
   // Buton Tıklamaları
   playPauseBtn.addEventListener('click', (e) => {
@@ -349,7 +332,7 @@
     prevTrack();
   });
 
-  // 5. "ODAĞI TEMİZLE" Mantığı
+  // 6. "ODAĞI TEMİZLE" Mantığı
   let isFocused = false;
   
   focusBtn.addEventListener('click', (e) => {
