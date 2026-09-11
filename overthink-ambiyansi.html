@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ambiyans | Overthink Tools</title>
 <script src="https://cdn.tailwindcss.com"></script>
+<!-- MP3 İçinden Kapak Resmi Okuyucu -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jsmediatags/3.9.5/jsmediatags.min.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -64,21 +66,36 @@
 <!-- 3. KONTROL EDİLEBİLİR ARAYÜZ KATMANI (UI) -->
 <div id="ui-layer" class="fixed inset-0 z-10 flex flex-col justify-between transition-opacity duration-700 ease-in-out">
   
-  <!-- Üst Menü (Geri Dön & Odağı Temizle) -->
-  <header class="w-full flex items-center justify-between px-6 sm:px-12 py-8">
+  <!-- Üst Menü (Geri Dön, Tam Ekran & Odağı Temizle) -->
+  <header class="w-full flex items-center justify-between px-4 sm:px-12 py-6 sm:py-8">
     <a href="index.html" class="flex items-center gap-2 text-xs text-zinc-300 hover:text-white transition-colors group px-4 py-2 glass rounded-full hover:border-white/30">
       <svg class="w-4 h-4 transform group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
       </svg>
-      Ana Sayfaya Dön
+      Ana Sayfa
     </a>
 
-    <button id="focus-btn" class="flex items-center gap-2 text-xs text-zinc-300 hover:text-white transition-colors px-4 py-2 glass rounded-full hover:border-white/30">
-      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15" />
-      </svg>
-      Odağı Temizle
-    </button>
+    <div class="flex items-center gap-2 sm:gap-3">
+      <!-- Tam Ekran Butonu -->
+      <button id="fullscreen-btn" title="Tam Ekran Yap" class="flex items-center gap-2 text-xs text-zinc-300 hover:text-white transition-colors px-3.5 sm:px-4 py-2 glass rounded-full hover:border-white/30">
+        <svg id="fs-expand-icon" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15" />
+        </svg>
+        <svg id="fs-compress-icon" class="w-4 h-4 hidden" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 9V4.5M9 9H4.5M9 9L3.75 3.75M9 15v4.5M9 15H4.5M9 15l-5.25 5.25M15 9h4.5M15 9V4.5M15 9l5.25-5.25M15 15h4.5M15 15v4.5M15 15l5.25 5.25" />
+        </svg>
+        <span class="hidden sm:inline">Tam Ekran</span>
+      </button>
+
+      <!-- Odağı Temizle Butonu -->
+      <button id="focus-btn" title="Arayüzü Gizle" class="flex items-center gap-2 text-xs text-zinc-300 hover:text-white transition-colors px-3.5 sm:px-4 py-2 glass rounded-full hover:border-white/30">
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+        </svg>
+        <span class="hidden sm:inline">Odağı Temizle</span>
+      </button>
+    </div>
   </header>
 
   <!-- Sol ve Sağ: Arka Plan Videosu Değiştirme Butonları -->
@@ -101,18 +118,28 @@
 
   <!-- Alt: Kompakt & Yüksek Kontrastlı Müzik Çalar Kapsülü -->
   <div class="w-full pb-8 px-4 flex justify-center">
-    <div class="glass rounded-full px-5 sm:px-7 py-3 flex items-center justify-between gap-4 sm:gap-6 shadow-2xl border border-white/10 max-w-lg w-full">
+    <div class="glass rounded-full px-4 sm:px-6 py-2.5 sm:py-3 flex items-center justify-between gap-4 sm:gap-6 shadow-2xl border border-white/10 max-w-lg w-full">
       
-      <!-- Sol: Şarkı Bilgisi & İkon -->
+      <!-- Sol: Kapak Resmi & Şarkı/Sanatçı Bilgisi -->
       <div class="flex items-center gap-3 overflow-hidden">
-        <div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center shrink-0 border border-white/10">
-          <svg class="w-4 h-4 text-zinc-200" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
-          </svg>
+        
+        <!-- Albüm Kapak Resmi Kutusu -->
+        <div class="relative w-10 h-10 rounded-full overflow-hidden bg-white/10 flex items-center justify-center shrink-0 border border-white/10 shadow-inner">
+          <img id="track-cover" src="" alt="Kapak" class="w-full h-full object-cover hidden">
+          <div id="track-icon-fallback" class="w-full h-full flex items-center justify-center">
+            <svg class="w-4 h-4 text-zinc-300" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+            </svg>
+          </div>
         </div>
+
         <div class="flex flex-col overflow-hidden text-left">
-          <span class="text-[9px] uppercase tracking-widest text-zinc-400 font-semibold">Müzik</span>
-          <p id="track-name" class="font-serif-display text-sm sm:text-base text-zinc-100 font-light truncate max-w-[140px] sm:max-w-[210px]">
+          <!-- Sanatçı Adı -->
+          <span id="artist-name" class="text-[10px] sm:text-[11px] uppercase tracking-wider text-zinc-400 font-medium truncate max-w-[130px] sm:max-w-[200px]">
+            Sanatçı
+          </span>
+          <!-- Şarkı Adı -->
+          <p id="track-name" class="font-serif-display text-sm sm:text-base text-zinc-100 font-normal truncate max-w-[130px] sm:max-w-[200px] leading-tight">
             Yükleniyor...
           </p>
         </div>
@@ -152,7 +179,7 @@
   ];
   let currentVideoIndex = 0;
 
-  // 2. Yedek MP3 Playlisti (GitHub deposundaki dosya adlarıyla tam uyumlu)
+  // 2. Yedek MP3 Playlisti
   const RAW_BASE_URL = 'https://raw.githubusercontent.com/hasanbkaylan-web/overthink.tools-audio/main/audios/';
   
   let playlist = [
@@ -204,20 +231,104 @@
   const bgVideo = document.getElementById('bg-video');
   const audio = document.getElementById('audio-player');
   const trackNameEl = document.getElementById('track-name');
+  const artistNameEl = document.getElementById('artist-name');
+  const trackCoverEl = document.getElementById('track-cover');
+  const trackFallbackIcon = document.getElementById('track-icon-fallback');
   const playPauseBtn = document.getElementById('play-pause-btn');
   const nextBtn = document.getElementById('next-btn');
   const prevBtn = document.getElementById('prev-btn');
   const iconPlay = document.getElementById('icon-play');
   const iconPause = document.getElementById('icon-pause');
   const focusBtn = document.getElementById('focus-btn');
+  const fullscreenBtn = document.getElementById('fullscreen-btn');
+  const fsExpandIcon = document.getElementById('fs-expand-icon');
+  const fsCompressIcon = document.getElementById('fs-compress-icon');
   const uiLayer = document.getElementById('ui-layer');
   const videoNextBtn = document.getElementById('video-next-btn');
   const videoPrevBtn = document.getElementById('video-prev-btn');
 
-  // Şarkı İsmini Güncelle
+  // Şarkı İsmini ve Sanatçıyı Ayırıp Yazdırma
+  function parseTrackTitle(fullTitle) {
+    const parts = fullTitle.split(' - ');
+    if (parts.length >= 2) {
+      return {
+        artist: parts[0].trim(),
+        title: parts.slice(1).join(' - ').trim()
+      };
+    }
+    return {
+      artist: "Overthink Ambiyansı",
+      title: fullTitle.trim()
+    };
+  }
+
   function updateTrackInfo() {
     if(playlist[currentTrackIndex]) {
-      trackNameEl.textContent = playlist[currentTrackIndex].title;
+      const { artist, title } = parseTrackTitle(playlist[currentTrackIndex].title);
+      artistNameEl.textContent = artist;
+      trackNameEl.textContent = title;
+      
+      // MP3 Dosyasından Kapak Resmini Okuma ve Bildirim Çubuğunu Güncelleme
+      extractCoverAndSetMediaSession(playlist[currentTrackIndex].url, artist, title);
+    }
+  }
+
+  // MP3'ten Kapak Çıkarma & Bildirim Çubuğu (MediaSession)
+  function extractCoverAndSetMediaSession(audioUrl, artist, title) {
+    // Varsayılan ikon durumuna getir
+    trackCoverEl.src = '';
+    trackCoverEl.classList.add('hidden');
+    trackFallbackIcon.classList.remove('hidden');
+
+    if (window.jsmediatags) {
+      window.jsmediatags.read(audioUrl, {
+        onSuccess: function(tag) {
+          const picture = tag.tags.picture;
+          if (picture) {
+            let base64String = "";
+            for (let i = 0; i < picture.data.length; i++) {
+              base64String += String.fromCharCode(picture.data[i]);
+            }
+            const coverBase64 = "data:" + picture.format + ";base64," + window.btoa(base64String);
+            
+            // UI Kapak Resmini Güncelle
+            trackCoverEl.src = coverBase64;
+            trackCoverEl.classList.remove('hidden');
+            trackFallbackIcon.classList.add('hidden');
+
+            // Bildirim Çubuğunu Güncelle
+            updateMediaSession(artist, title, coverBase64);
+          } else {
+            updateMediaSession(artist, title);
+          }
+        },
+        onError: function() {
+          updateMediaSession(artist, title);
+        }
+      });
+    } else {
+      updateMediaSession(artist, title);
+    }
+  }
+
+  // Bildirim Çubuğu / Kilit Ekranı Entegrasyonu
+  function updateMediaSession(artist, title, coverUrl = null) {
+    if ('mediaSession' in navigator) {
+      const artworkList = coverUrl ? [
+        { src: coverUrl, sizes: '512x512', type: 'image/jpeg' }
+      ] : [];
+
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: title,
+        artist: artist,
+        album: 'Overthink Ambiyansı',
+        artwork: artworkList
+      });
+
+      navigator.mediaSession.setActionHandler('play', () => togglePlay());
+      navigator.mediaSession.setActionHandler('pause', () => togglePlay());
+      navigator.mediaSession.setActionHandler('previoustrack', () => prevTrack());
+      navigator.mediaSession.setActionHandler('nexttrack', () => nextTrack());
     }
   }
 
@@ -249,7 +360,7 @@
     }
   }
 
-  // İlk Yükleme
+  // İlk Başlatma
   updateTrackInfo();
   loadTrack(currentTrackIndex);
   syncFromGitHub();
@@ -281,7 +392,7 @@
   // 5. Oynatma & Durdurma Mantığı
   function togglePlay() {
     if (audio.paused) {
-      audio.play().catch(e => console.log("Otomatik çalma tarayıcı tarafından engellendi:", e));
+      audio.play().catch(e => console.log("Otomatik oynatma kısıtlandı:", e));
     } else {
       audio.pause();
     }
@@ -302,7 +413,7 @@
     audio.play().catch(() => {});
   }
 
-  // Ses Durumu Dinleyicileri (İkonları Güncelle)
+  // Ses Durumu Dinleyicileri
   audio.addEventListener('play', () => {
     iconPlay.classList.add('hidden');
     iconPause.classList.remove('hidden');
@@ -313,7 +424,6 @@
     iconPause.classList.add('hidden');
   });
 
-  // Şarkı Bittiğinde Otomatik Sıradakine Geç
   audio.addEventListener('ended', () => {
     nextTrack();
   });
@@ -332,7 +442,33 @@
     prevTrack();
   });
 
-  // 6. "ODAĞI TEMİZLE" Mantığı
+  // 6. TAM EKRAN MANTIĞI
+  function toggleFullscreen() {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch(() => {});
+    } else {
+      if (document.exitFullscreen) {
+        document.exitFullscreen().catch(() => {});
+      }
+    }
+  }
+
+  fullscreenBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    toggleFullscreen();
+  });
+
+  document.addEventListener('fullscreenchange', () => {
+    if (document.fullscreenElement) {
+      fsExpandIcon.classList.add('hidden');
+      fsCompressIcon.classList.remove('hidden');
+    } else {
+      fsExpandIcon.classList.remove('hidden');
+      fsCompressIcon.classList.add('hidden');
+    }
+  });
+
+  // 7. "ODAĞI TEMİZLE" Mantığı
   let isFocused = false;
   
   focusBtn.addEventListener('click', (e) => {
