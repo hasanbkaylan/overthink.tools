@@ -7,7 +7,7 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
     --ink-0: #0a0a0a;
@@ -41,65 +41,39 @@
   }
   .vignette {
     position: fixed; inset: 0; pointer-events: none; z-index: 1;
-    background: radial-gradient(circle, transparent 20%, rgba(0,0,0,0.85) 100%);
+    background: radial-gradient(circle, transparent 30%, rgba(0,0,0,0.85) 100%);
   }
   .glass {
-    background: rgba(0, 0, 0, 0.45);
+    background: rgba(10, 10, 10, 0.6);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255,255,255,.08);
-  }
-
-  /* Ses Ayarı Çubuğu (Range Slider) Özelleştirmesi */
-  input[type=range] {
-    -webkit-appearance: none;
-    background: transparent;
-  }
-  input[type=range]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    height: 12px;
-    width: 12px;
-    border-radius: 50%;
-    background: #e4e4e7;
-    cursor: pointer;
-    margin-top: -4px;
-    box-shadow: 0 0 10px rgba(255,255,255,0.5);
-  }
-  input[type=range]::-webkit-slider-runnable-track {
-    width: 100%;
-    height: 4px;
-    cursor: pointer;
-    background: rgba(255, 255, 255, 0.15);
-    border-radius: 9999px;
-  }
-  input[type=range]:focus {
-    outline: none;
+    border: 1px solid rgba(255,255,255,.12);
   }
 </style>
 </head>
 <body class="text-zinc-400 antialiased h-[100dvh] relative bg-black">
 
 <!-- 1. ARKA PLAN VİDEOSU -->
-<video id="bg-video" autoplay loop muted playsinline class="fixed inset-0 w-full h-full object-cover z-0 transition-opacity duration-1000 opacity-0"></video>
+<video id="bg-video" autoplay loop muted playsinline class="fixed inset-0 w-full h-full object-cover z-0 transition-opacity duration-700 opacity-0"></video>
 <div class="vignette"></div>
 <div class="grain"></div>
 
-<!-- GÖRÜNMEZ YOUTUBE PLAYER -->
+<!-- GÖRÜNMEZ YOUTUBE OYNATICI -->
 <div id="yt-player-container" class="hidden"></div>
 
 <!-- 2. KONTROL EDİLEBİLİR ARAYÜZ KATMANI (UI) -->
-<div id="ui-layer" class="fixed inset-0 z-10 flex flex-col justify-between transition-opacity duration-1000 ease-in-out">
+<div id="ui-layer" class="fixed inset-0 z-10 flex flex-col justify-between transition-opacity duration-700 ease-in-out">
   
   <!-- Üst Menü (Geri Dön & Odağı Temizle) -->
   <header class="w-full flex items-center justify-between px-6 sm:px-12 py-8">
-    <a href="index.html" class="flex items-center gap-2 text-xs text-zinc-300 hover:text-white transition-colors group px-4 py-2 glass rounded-full">
+    <a href="index.html" class="flex items-center gap-2 text-xs text-zinc-300 hover:text-white transition-colors group px-4 py-2 glass rounded-full hover:border-white/30">
       <svg class="w-4 h-4 transform group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
       </svg>
       Ana Sayfaya Dön
     </a>
 
-    <button id="focus-btn" class="flex items-center gap-2 text-xs text-zinc-300 hover:text-white transition-colors px-4 py-2 glass rounded-full">
+    <button id="focus-btn" class="flex items-center gap-2 text-xs text-zinc-300 hover:text-white transition-colors px-4 py-2 glass rounded-full hover:border-white/30">
       <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15" />
       </svg>
@@ -107,60 +81,78 @@
     </button>
   </header>
 
-  <!-- Müzik Kontrol Paneli (Player) -->
-  <div class="w-full pb-10 px-4 flex justify-center">
-    <div class="glass w-full max-w-md rounded-3xl p-6 sm:p-8 flex flex-col gap-6 shadow-2xl">
+  <!-- Sol ve Sağ: Arka Plan Videosu Değiştirme Butonları -->
+  <div class="w-full flex justify-between px-4 sm:px-8 pointer-events-none">
+    
+    <!-- Önceki Video -->
+    <button id="video-prev-btn" title="Önceki Manzara" class="pointer-events-auto glass w-11 h-11 flex items-center justify-center rounded-full text-white/80 hover:text-white hover:border-white/40 hover:scale-105 transition-all shadow-xl active:scale-95">
+      <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+      </svg>
+    </button>
+
+    <!-- Sonraki Video -->
+    <button id="video-next-btn" title="Sonraki Manzara" class="pointer-events-auto glass w-11 h-11 flex items-center justify-center rounded-full text-white/80 hover:text-white hover:border-white/40 hover:scale-105 transition-all shadow-xl active:scale-95">
+      <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+      </svg>
+    </button>
+  </div>
+
+  <!-- Alt: Kompakt & Yüksek Kontrastlı Müzik Çalar Kapsülü -->
+  <div class="w-full pb-8 px-4 flex justify-center">
+    <div class="glass rounded-full px-5 sm:px-7 py-3 flex items-center justify-between gap-4 sm:gap-6 shadow-2xl border border-white/10 max-w-lg w-full">
       
-      <!-- Şarkı Bilgisi -->
-      <div class="flex flex-col items-center text-center">
-        <span class="font-sans text-[10px] font-semibold tracking-[0.2em] text-zinc-500 uppercase mb-1">Şu An Çalıyor</span>
-        <h3 id="track-name" class="font-serif-display text-lg text-zinc-200 font-light line-clamp-1 w-full text-ellipsis overflow-hidden">
-          Müzik Yükleniyor...
-        </h3>
+      <!-- Sol: Şarkı Bilgisi & İkon -->
+      <div class="flex items-center gap-3 overflow-hidden">
+        <div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center shrink-0 border border-white/10">
+          <svg class="w-4 h-4 text-zinc-200" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+          </svg>
+        </div>
+        <div class="flex flex-col overflow-hidden text-left">
+          <span class="text-[9px] uppercase tracking-widest text-zinc-400 font-semibold">Müzik</span>
+          <p id="track-name" class="font-serif-display text-sm sm:text-base text-zinc-100 font-light truncate max-w-[140px] sm:max-w-[210px]">
+            Yükleniyor...
+          </p>
+        </div>
       </div>
 
-      <!-- Kontroller -->
-      <div class="flex flex-col gap-5">
+      <!-- Sağ: Beyaz & Parlak Butonlar -->
+      <div class="flex items-center gap-2 sm:gap-3 shrink-0">
         
-        <!-- Butonlar (Önceki, Oynat, Sonraki) -->
-        <div class="flex items-center justify-center gap-8">
-          <button id="prev-btn" class="text-zinc-400 hover:text-white transition-colors p-2">
-            <svg class="w-6 h-6 fill-currentColor" viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
-          </button>
-          
-          <button id="play-pause-btn" class="w-14 h-14 flex items-center justify-center bg-white/10 hover:bg-white/20 text-white rounded-full transition-all border border-white/10 hover:border-white/30">
-            <!-- Play İkonu (Varsayılan) -->
-            <svg id="icon-play" class="w-6 h-6 fill-currentColor ml-1" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-            <!-- Pause İkonu (Başlangıçta Gizli) -->
-            <svg id="icon-pause" class="w-6 h-6 fill-currentColor hidden" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
-          </button>
-          
-          <button id="next-btn" class="text-zinc-400 hover:text-white transition-colors p-2">
-            <svg class="w-6 h-6 fill-currentColor" viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
-          </button>
-        </div>
+        <!-- Önceki Şarkı -->
+        <button id="prev-btn" class="w-9 h-9 flex items-center justify-center text-zinc-300 hover:text-white transition-all hover:bg-white/10 rounded-full">
+          <svg class="w-4 h-4 fill-currentColor" viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+        </button>
 
-        <!-- Ses Seviyesi (Slider) -->
-        <div class="flex items-center gap-3 px-2">
-          <svg class="w-4 h-4 text-zinc-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15.536 8.464a5 5 0 010 7.072M17.95 6.05a8 8 0 010 11.9m-9.193-4.814l-2.828 2.828a1 1 0 01-.707.293H3a1 1 0 01-1-1v-4a1 1 0 011-1h2.217a1 1 0 01.707.293l2.828 2.828z" /></svg>
-          <input type="range" id="volume-slider" min="0" max="100" value="50" class="w-full">
-        </div>
+        <!-- Oynat / Durdur (Bembeyaz Yüksek Kontrast) -->
+        <button id="play-pause-btn" class="w-10 h-10 flex items-center justify-center bg-white text-black hover:bg-zinc-200 rounded-full transition-all shadow-lg shadow-white/10 transform active:scale-95">
+          <svg id="icon-play" class="w-4 h-4 fill-currentColor ml-0.5" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          <svg id="icon-pause" class="w-4 h-4 fill-currentColor hidden" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+        </button>
 
+        <!-- Sonraki Şarkı -->
+        <button id="next-btn" class="w-9 h-9 flex items-center justify-center text-zinc-300 hover:text-white transition-all hover:bg-white/10 rounded-full">
+          <svg class="w-4 h-4 fill-currentColor" viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+        </button>
       </div>
+
     </div>
   </div>
 
 </div>
 
-<!-- YOUTUBE IFRAME API YÜKLEMESİ VE MANTIK -->
+<!-- YOUTUBE IFRAME API VE MANTIK -->
 <script>
-  // 1. Veri Yapıları
+  // 1. Manzara Videoları Listesi
   const videos = [
     'videos/video1.mp4',
     'videos/video2.mp4'
   ];
   let currentVideoIndex = 0;
 
+  // 2. Müzik Playlisti
   const playlist = [
     { title: "Kalben - Yara", id: "kmwLour0wLQ" },
     { title: "ASLAR; Astral; Lessio - yenildiğim tek savaştın", id: "K2-QZ-hEU9Y" },
@@ -202,33 +194,48 @@
   ];
   let currentTrackIndex = 0;
 
-  // 2. DOM Elementleri
+  // 3. DOM Elemanları
   const bgVideo = document.getElementById('bg-video');
   const trackNameEl = document.getElementById('track-name');
   const playPauseBtn = document.getElementById('play-pause-btn');
   const nextBtn = document.getElementById('next-btn');
   const prevBtn = document.getElementById('prev-btn');
-  const volSlider = document.getElementById('volume-slider');
   const iconPlay = document.getElementById('icon-play');
   const iconPause = document.getElementById('icon-pause');
   const focusBtn = document.getElementById('focus-btn');
   const uiLayer = document.getElementById('ui-layer');
+  const videoNextBtn = document.getElementById('video-next-btn');
+  const videoPrevBtn = document.getElementById('video-prev-btn');
 
-  // Arka Plan Videosunu Yükle
+  // Arka Plan Videosunu Yükleme ve Değiştirme
   function loadVideo(index) {
-    bgVideo.style.opacity = 0; // Yumuşak geçiş
+    bgVideo.style.opacity = 0;
     setTimeout(() => {
       bgVideo.src = videos[index];
       bgVideo.play().catch(e => console.log("Video auto-play engellendi."));
       bgVideo.style.opacity = 1;
-    }, 500);
+    }, 400);
   }
   loadVideo(currentVideoIndex);
 
-  // 3. YOUTUBE API YÜKLEMESİ
+  // Video Butonları Dinleyicileri (Müzikten bağımsız)
+  videoNextBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    currentVideoIndex = (currentVideoIndex + 1) % videos.length;
+    loadVideo(currentVideoIndex);
+  });
+
+  videoPrevBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    currentVideoIndex = (currentVideoIndex - 1 + videos.length) % videos.length;
+    loadVideo(currentVideoIndex);
+  });
+
+  // 4. Reklamsız / Nocookie YouTube API Entegrasyonu
   let player;
   const tag = document.createElement('script');
-  tag.src = "https://www.youtube.com/iframe_api";
+  // Reklam ve izleme azaltılmış nocookie API adresi
+  tag.src = "https://www.youtube-nocookie.com/iframe_api";
   const firstScriptTag = document.getElementsByTagName('script')[0];
   firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
@@ -243,7 +250,12 @@
         'disablekb': 1,
         'modestbranding': 1,
         'rel': 0,
-        'showinfo': 0
+        'showinfo': 0,
+        'iv_load_policy': 3,
+        'fs': 0,
+        'playsinline': 1,
+        'enablejsapi': 1,
+        'origin': window.location.origin
       },
       events: {
         'onReady': onPlayerReady,
@@ -254,22 +266,19 @@
 
   function onPlayerReady(event) {
     updateTrackInfo();
-    player.setVolume(volSlider.value);
   }
 
   function onPlayerStateChange(event) {
-    // Şarkı bittiğinde sonrakine geç (0 = YT.PlayerState.ENDED)
-    if (event.data === 0) {
+    if (event.data === 0) { // Şarkı bittiğinde
       nextTrack();
     }
   }
 
-  // Şarkı Bilgisini Ekrana Yazdır
   function updateTrackInfo() {
     trackNameEl.textContent = playlist[currentTrackIndex].title;
   }
 
-  // Oynatma - Durdurma Mantığı
+  // Müzik Oynat / Durdur
   let isPlaying = false;
   function togglePlay() {
     if(!player || !player.getPlayerState) return;
@@ -290,23 +299,17 @@
     currentTrackIndex = (currentTrackIndex + 1) % playlist.length;
     player.loadVideoById(playlist[currentTrackIndex].id);
     updateTrackInfo();
-    
-    if(!isPlaying) togglePlay(); // Eğer duruyorsa da sonraki deyince çalsın
-
-    // Sonraki şarkıda arka plan videosunu da değiştir
-    currentVideoIndex = (currentVideoIndex + 1) % videos.length;
-    loadVideo(currentVideoIndex);
+    if(!isPlaying) togglePlay();
   }
 
   function prevTrack() {
     currentTrackIndex = (currentTrackIndex - 1 + playlist.length) % playlist.length;
     player.loadVideoById(playlist[currentTrackIndex].id);
     updateTrackInfo();
-    
     if(!isPlaying) togglePlay();
   }
 
-  // Buton Dinleyicileri
+  // Şarkı Butonları Dinleyicileri
   playPauseBtn.addEventListener('click', (e) => {
     e.stopPropagation();
     togglePlay();
@@ -319,24 +322,16 @@
     e.stopPropagation();
     prevTrack();
   });
-  
-  volSlider.addEventListener('input', (e) => {
-    e.stopPropagation();
-    if(player && player.setVolume) {
-      player.setVolume(e.target.value);
-    }
-  });
 
-  // 4. "ODAĞI TEMİZLE" (Arayüz Gizleme) Mantığı
+  // 5. "ODAĞI TEMİZLE" (UI Gizleme) Mantığı
   let isFocused = false;
   
   focusBtn.addEventListener('click', (e) => {
-    e.stopPropagation(); // Arka plan tıklamasını engelle
+    e.stopPropagation();
     uiLayer.classList.add('ui-hidden');
     isFocused = true;
   });
 
-  // Ekrana herhangi bir yere tıklanırsa UI geri gelsin
   document.addEventListener('click', () => {
     if (isFocused) {
       uiLayer.classList.remove('ui-hidden');
@@ -344,13 +339,9 @@
     }
   });
 
-  // UI üstündeki tıklamaların belgeye ulaşıp UI'yi yanlışlıkla kapamasını engelliyoruz
   uiLayer.addEventListener('click', (e) => {
-    // Ekranda menü açıkken boşluğa basarsa bir şey olmasın, 
-    // ama butonlara vs basarsa işlev çalışsın.
     if(e.target.id === 'ui-layer' && !isFocused) return;
   });
-
 </script>
 </body>
 </html>
