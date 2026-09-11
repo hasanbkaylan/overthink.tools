@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="tr" class="scroll-smooth snap-y snap-mandatory h-[100dvh] overflow-y-auto">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Overthink Tools</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink-0:#0a0a0a;
+    --ink-1:#111113;
+  }
+  
+  /* --- Metin ve Görsel Seçimini Engelleme --- */
+  * {
+    -webkit-user-select: none; 
+    -ms-user-select: none; 
+    user-select: none; 
+    -webkit-user-drag: none; 
+  }
+  
+  /* Form elemanları için istisna */
+  input, textarea, [contenteditable="true"] {
+    -webkit-user-select: auto;
+    -ms-user-select: auto;
+    user-select: auto;
+  }
+
+  body{
+    background:var(--ink-0);
+    font-family:'Inter', ui-sans-serif, system-ui, sans-serif;
+    margin: 0;
+  }
+  .font-serif-display{
+    font-family:'Newsreader', ui-serif, Georgia, serif;
+  }
+  .grain{
+    position:fixed; inset:0; pointer-events:none; z-index:1; opacity:.035; mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .vignette{
+    position:fixed; inset:0; pointer-events:none; z-index:1;
+    background:radial-gradient(ellipse at 50% 20%, transparent 0%, transparent 40%, rgba(0,0,0,.55) 100%);
+  }
+  .glass{
+    background:rgba(0,0,0,.4);
+    backdrop-filter:blur(16px);
+    -webkit-backdrop-filter:blur(16px);
+    border:1px solid rgba(255,255,255,.08);
+  }
+  .hero-glow{
+    background:radial-gradient(circle at 50% 35%, rgba(124,135,151,.10) 0%, transparent 60%);
+  }
+  
+  @keyframes drift{
+    0%{ transform:translateY(0); opacity:.55; }
+    50%{ transform:translateY(8px); opacity:1; }
+    100%{ transform:translateY(0); opacity:.55; }
+  }
+  .drift{ animation:drift 3.2s ease-in-out infinite; }
+
+  @keyframes riseIn{
+    from{ opacity:0; transform:translateY(14px); }
+    to{ opacity:1; transform:translateY(0); }
+  }
+  .rise-in{ animation:riseIn 1.4s cubic-bezier(.22,1,.36,1) both; }
+  .rise-in-delay{ animation:riseIn 1.4s cubic-bezier(.22,1,.36,1) .35s both; }
+  .rise-in-delay-2{ animation:riseIn 1.4s cubic-bezier(.22,1,.36,1) .70s both; }
+
+  /* Header 3-4 Saniye Sonra Başlayan Animasyonu */
+  @keyframes headerPulseGlow {
+    0% {
+      border-color: rgba(255,255,255, 0.08);
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); 
+    }
+    100% {
+      border-color: rgba(255,255,255, 0.35);
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5), 0 0 20px rgba(255,255,255,0.15), inset 0 0 10px rgba(255,255,255,0.08);
+    }
+  }
+  
+  .header-auto-glow {
+    animation: 
+      riseIn 1.4s cubic-bezier(.22,1,.36,1) both, 
+      headerPulseGlow 2s ease-in-out infinite alternate 3.5s both;
+  }
+
+  /* Kart Geçişleri ve Parlama Animasyonu */
+  .card-tool{ 
+    transition:transform .4s ease, border-color .4s ease, background-color .4s ease; 
+  }
+  @keyframes pulseGlow {
+    0% { 
+      border-color: rgba(255,255,255, 0.15); 
+      box-shadow: 0 0 10px rgba(255,255,255,0.02), inset 0 0 10px rgba(255,255,255,0.02); 
+    }
+    100% { 
+      border-color: rgba(255,255,255, 0.4); 
+      box-shadow: 0 0 25px rgba(255,255,255,0.15), inset 0 0 15px rgba(255,255,255,0.1); 
+    }
+  }
+  .card-tool:hover{ 
+    background-color:rgba(0,0,0,.6); 
+    transform: translateY(-4px);
+    animation: pulseGlow 1.5s infinite alternate ease-in-out;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .drift, .rise-in, .rise-in-delay, .rise-in-delay-2, .card-tool:hover, .header-auto-glow { animation:none; }
+  }
+</style>
+</head>
+<body class="text-zinc-400 antialiased relative">
+
+<div class="grain"></div>
+<div class="vignette"></div>
+
+<!-- HEADER -->
+<header class="fixed top-6 left-0 right-0 mx-auto z-50 glass rounded-full px-6 py-3 w-[90%] sm:w-11/12 max-w-3xl flex items-center justify-between header-auto-glow">
+  <a href="#hero" class="flex flex-col justify-center group">
+    <span class="font-serif-display text-lg italic leading-none text-zinc-100 group-hover:text-white transition-colors">overthink</span>
+    <span class="font-sans text-[10px] font-semibold tracking-[0.2em] text-zinc-500 uppercase mt-0.5 group-hover:text-zinc-400 transition-colors">tools</span>
+  </a>
+  <nav class="hidden sm:flex items-center gap-8 text-sm text-zinc-400 font-light">
+    <a href="#about" class="hover:text-zinc-100 transition-colors">Hakkında</a>
+    <a href="#tools" class="hover:text-zinc-100 transition-colors">Araçlar</a>
+  </nav>
+  <a href="#tools" class="hidden sm:inline-flex items-center gap-2 text-xs text-zinc-200 border border-white/10 bg-white/5 hover:bg-white/10 rounded-full px-4 py-2 transition-all hover:border-white/20">
+    Hemen Başla
+  </a>
+  <!-- Mobil Menü Butonu -->
+  <a href="#tools" class="sm:hidden text-xs text-zinc-300 border border-white/10 rounded-full px-4 py-1.5 hover:bg-white/10 transition-colors">Menü</a>
+</header>
+
+<!-- HERO -->
+<section id="hero" class="relative min-h-[100dvh] w-full flex flex-col items-center justify-center px-6 hero-glow overflow-hidden snap-center shrink-0">
+  <div class="max-w-3xl text-center rise-in-delay">
+    <p class="font-serif-display italic text-2xl sm:text-3xl md:text-4xl leading-relaxed text-zinc-100 font-light">
+      Bazen kafanın içindeki gürültü,<br class="hidden sm:block">
+      dışarıdaki tüm seslerden daha yüksektir.
+    </p>
+  </div>
+  <a href="#about" class="absolute bottom-10 flex flex-col items-center gap-2 text-zinc-500 hover:text-zinc-300 transition-colors rise-in-delay-2 z-10 cursor-pointer">
+    <span class="text-xs tracking-wide font-light">aşağı kaydır</span>
+    <svg class="drift w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 4v15"></path>
+      <path d="M6 13l6 6 6-6"></path>
+    </svg>
+  </a>
+</section>
+
+<!-- ABOUT -->
+<section id="about" class="relative min-h-[100dvh] px-6 py-28 flex items-center justify-center snap-center shrink-0">
+  <div class="max-w-xl mx-auto text-center sm:text-left">
+    <p class="font-serif-display text-xl sm:text-2xl leading-relaxed text-zinc-300 font-light">
+      Overthink Tools; düşüncelerinin arasında kaybolduğun gecelerde sana eşlik etmek,
+      zihnini boşaltmak ve biraz olsun nefes almanı sağlamak için tasarlandı.
+    </p>
+    <div class="glass rounded-2xl px-6 py-6 mt-12 text-left relative overflow-hidden group hover:border-white/20 transition-colors">
+      <p class="text-sm sm:text-base leading-relaxed text-zinc-400 font-light relative z-10">
+        Bu siteyi yalnız kalmış ve dışlanmış hisseden herkes için, tam da sizin gibi biri hazırladı.
+        <span class="text-zinc-200">Yalnız değilsiniz.</span>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- TOOLS -->
+<section id="tools" class="relative min-h-[100dvh] px-6 pt-28 pb-16 flex flex-col justify-center snap-start shrink-0">
+  <div class="max-w-5xl mx-auto w-full">
+    <h2 class="font-serif-display text-lg sm:text-xl text-zinc-200 font-light mb-10 text-center">
+      Kendine ayırabileceğin küçük alanlar
+    </h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+      
+      <!-- Tool 1 -->
+      <div class="card-tool glass rounded-2xl p-7 flex flex-col justify-between">
+        <div>
+          <h3 class="text-zinc-100 text-base font-medium mb-2">Overthink Ambiyansı</h3>
+          <p class="text-sm text-zinc-500 leading-relaxed font-light">
+            Yağmurlu gece manzaraları ve arka planda hüzünlü overthink müzikleri eşliğinde biraz uzaklaş.
+          </p>
+        </div>
+        <a href="#" class="mt-6 inline-flex items-center gap-2 text-sm text-zinc-300 hover:text-white transition-colors w-fit border-b border-white/10 hover:border-white/50 pb-0.5">Araca Git</a>
+      </div>
+
+      <!-- Tool 2 (Sessiz Duvar) -->
+      <div class="card-tool glass rounded-2xl p-7 flex flex-col justify-between">
+        <div>
+          <h3 class="text-zinc-100 text-base font-medium mb-2">Sessiz Duvar</h3>
+          <p class="text-sm text-zinc-500 leading-relaxed font-light">
+            Düşüncelerini yaz, ekrana bırak ve yavaşça toza dönüşmelerini izle. Kimse okumayacak.
+          </p>
+        </div>
+        <!-- Kaydırma + Yönlendirme Efekti Burada -->
+        <a href="sessiz-duvar.html" onclick="event.preventDefault(); window.scrollTo({top: 0, behavior: 'smooth'}); setTimeout(() => window.location.href = 'sessiz-duvar.html', 800);" class="mt-6 inline-flex items-center gap-2 text-sm text-zinc-300 hover:text-white transition-colors w-fit border-b border-white/10 hover:border-white/50 pb-0.5">
+          Başlat
+        </a>
+      </div>
+
+      <!-- Tool 3 -->
+      <div class="card-tool glass rounded-2xl p-7 flex flex-col justify-between">
+        <div>
+          <h3 class="text-zinc-100 text-base font-medium mb-2">Ortam Sesleri Mixeri</h3>
+          <p class="text-sm text-zinc-500 leading-relaxed font-light">
+            Yağmur, rüzgar ve gece seslerini kendi sessizliğine göre harmanla.
+          </p>
+        </div>
+        <a href="#" class="mt-6 inline-flex items-center gap-2 text-sm text-zinc-300 hover:text-white transition-colors w-fit border-b border-white/10 hover:border-white/50 pb-0.5">Araca Git</a>
+      </div>
+
+      <!-- Tool 4 -->
+      <div class="card-tool glass rounded-2xl p-7 flex flex-col justify-between">
+        <div>
+          <h3 class="text-zinc-100 text-base font-medium mb-2">Zihin Sakinleştirici</h3>
+          <p class="text-sm text-zinc-500 leading-relaxed font-light">
+            Ritimli bir nefes egzersizi ile birkaç dakikalığına yalnızca nefesine odaklan.
+          </p>
+        </div>
+        <a href="#" class="mt-6 inline-flex items-center gap-2 text-sm text-zinc-300 hover:text-white transition-colors w-fit border-b border-white/10 hover:border-white/50 pb-0.5">Başlat</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="relative px-6 py-10 border-t border-white/5 snap-end shrink-0 bg-[#0a0a0a]">
+  <div class="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+    <p class="text-xs text-zinc-600 font-light">💖 ile yapıldı</p>
+    <a href="https://github.com/hasanbkaylan/overthink.tools" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-xs text-zinc-500 hover:text-zinc-200 transition-colors">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M12 .5C5.73.5.98 5.24.98 11.52c0 4.99 3.24 9.22 7.73 10.72.57.1.78-.25.78-.55 0-.27-.01-1.16-.02-2.1-3.14.68-3.8-1.34-3.8-1.34-.52-1.31-1.26-1.66-1.26-1.66-1.03-.7.08-.69.08-.69 1.14.08 1.74 1.17 1.74 1.17 1.01 1.73 2.65 1.23 3.3.94.1-.73.4-1.23.72-1.51-2.51-.29-5.15-1.25-5.15-5.58 0-1.23.44-2.24 1.16-3.03-.12-.29-.5-1.44.11-3 0 0 .95-.3 3.11 1.16a10.8 10.8 0 0 1 5.66 0c2.16-1.46 3.11-1.16 3.11-1.16.61 1.56.23 2.71.11 3 .72.79 1.16 1.8 1.16 3.03 0 4.34-2.65 5.29-5.17 5.57.41.35.77 1.04.77 2.11 0 1.52-.01 2.75-.01 3.12 0 .3.2.66.79.55A10.53 10.53 0 0 0 23.02 11.5C23.02 5.24 18.27.5 12 .5Z"/>
+      </svg>
+      <span>GitHub</span>
+    </a>
+  </div>
+</footer>
+
+</body>
+</html>
