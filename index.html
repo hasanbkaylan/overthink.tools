@@ -3,18 +3,63 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Overthink Tools</title>
+
+<!-- 1. GOOGLE & ARAMA MOTORU SEO OPTİMİZASYONU -->
+<title>Overthink Tools — Zihnini Boşalt, Nefes Al ve Sakinleş</title>
+<meta name="description" content="Overthink Tools; geceleri düşüncelerinde kaybolanlar için tasarlandı. Yağmurlu ambiyans müzikleri, düşüncelerini yok eden Sessiz Duvar ve ritmik nefes egzersizleri.">
+<meta name="keywords" content="overthink tools, overthinking, aşırı düşünme, zihin boşaltma, zihin sakinleştirici, sessiz duvar, overthink ambiyansı, nefes egzersizi, gece müzikleri, uyku sesleri, rahatlatıcı ambiyans">
+<meta name="author" content="Overthink Tools">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+<link rel="canonical" href="https://overthink.tools/">
+
+<!-- Open Graph (Sosyal Medya & WhatsApp Paylaşım Önizlemesi) -->
+<meta property="og:locale" content="tr_TR">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Overthink Tools — Zihnini Boşalt, Nefes Al ve Sakinleş">
+<meta property="og:description" content="Kafanın içindeki gürültüyü dindirecek küçük sığınaklar. Ambiyans videoları, Sessiz Duvar ve Zihin Sakinleştirici.">
+<meta property="og:url" content="https://overthink.tools/">
+<meta property="og:site_name" content="Overthink Tools">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Overthink Tools — Zihnini Boşalt, Nefes Al ve Sakinleş">
+<meta name="twitter:description" content="Aşırı düşündüğün gecelerde sana eşlik eden minimalist zihin rahatlatma araçları.">
+
+<!-- Yapılandırılmış Veri (Schema.org JSON-LD) -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Overthink Tools",
+  "url": "https://overthink.tools/",
+  "description": "Aşırı düşünen zihinler için tasarlanmış minimalist rahatlama araçları bütünü.",
+  "applicationCategory": "HealthApplication",
+  "operatingSystem": "All",
+  "inLanguage": "tr",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "featureList": [
+    "Overthink Ambiyansı (Video & MP3 Müzik)",
+    "Sessiz Duvar (Düşünceleri Toza Dönüştürerek Yok Etme)",
+    "Zihin Sakinleştirici (Kutu Nefesi ve 4-7-8 Egzersizi)"
+  ]
+}
+</script>
+
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
     --ink-0:#0a0a0a;
     --ink-1:#111113;
   }
   
-  /* --- Metin ve Görsel Seçimini Engelleme --- */
+  /* Metin ve Görsel Seçimini Engelleme */
   * {
     -webkit-user-select: none; 
     -ms-user-select: none; 
@@ -45,7 +90,7 @@
     background:radial-gradient(ellipse at 50% 20%, transparent 0%, transparent 40%, rgba(0,0,0,.55) 100%);
   }
   .glass{
-    background:rgba(0,0,0,.4);
+    background:rgba(0,0,0,.45);
     backdrop-filter:blur(16px);
     -webkit-backdrop-filter:blur(16px);
     border:1px solid rgba(255,255,255,.08);
@@ -87,24 +132,24 @@
       headerPulseGlow 2s ease-in-out infinite alternate 3.5s both;
   }
 
-  /* Kart Parlama Efekti */
-  .card-tool{ 
-    transition:transform .4s ease, border-color .4s ease, background-color .4s ease; 
+  /* Zenginleştirilmiş Kart Tasarımı Efektleri */
+  .card-tool { 
+    transition: transform .4s cubic-bezier(0.25, 1, 0.5, 1), border-color .4s ease, background-color .4s ease, box-shadow .4s ease; 
   }
   @keyframes pulseGlow {
     0% { 
-      border-color: rgba(255,255,255, 0.15); 
-      box-shadow: 0 0 10px rgba(255,255,255,0.02), inset 0 0 10px rgba(255,255,255,0.02); 
+      border-color: rgba(255,255,255, 0.2); 
+      box-shadow: 0 10px 30px -10px rgba(0,0,0,0.8), 0 0 15px rgba(255,255,255,0.04); 
     }
     100% { 
-      border-color: rgba(255,255,255, 0.4); 
-      box-shadow: 0 0 25px rgba(255,255,255,0.15), inset 0 0 15px rgba(255,255,255,0.1); 
+      border-color: rgba(255,255,255, 0.45); 
+      box-shadow: 0 20px 40px -10px rgba(0,0,0,0.9), 0 0 30px rgba(255,255,255,0.12), inset 0 0 15px rgba(255,255,255,0.04); 
     }
   }
-  .card-tool:hover{ 
-    background-color:rgba(0,0,0,.6); 
-    transform: translateY(-4px);
-    animation: pulseGlow 1.5s infinite alternate ease-in-out;
+  .card-tool:hover { 
+    background-color: rgba(12, 12, 14, 0.75); 
+    transform: translateY(-6px);
+    animation: pulseGlow 1.8s infinite alternate ease-in-out;
   }
 
   @media (prefers-reduced-motion: reduce){
@@ -133,13 +178,13 @@
   <a href="#tools" class="sm:hidden text-xs text-zinc-300 border border-white/10 rounded-full px-4 py-1.5 hover:bg-white/10 transition-colors">Menü</a>
 </header>
 
-<!-- HERO -->
+<!-- 1. HERO -->
 <section id="hero" class="relative min-h-[100dvh] w-full flex flex-col items-center justify-center px-6 hero-glow overflow-hidden snap-center shrink-0">
   <div class="max-w-3xl text-center rise-in-delay">
-    <p class="font-serif-display italic text-2xl sm:text-3xl md:text-4xl leading-relaxed text-zinc-100 font-light">
+    <h1 class="font-serif-display italic text-2xl sm:text-3xl md:text-4xl leading-relaxed text-zinc-100 font-light">
       Bazen kafanın içindeki gürültü,<br class="hidden sm:block">
       dışarıdaki tüm seslerden daha yüksektir.
-    </p>
+    </h1>
   </div>
   <a href="#about" class="absolute bottom-10 flex flex-col items-center gap-2 text-zinc-500 hover:text-zinc-300 transition-colors rise-in-delay-2 z-10 cursor-pointer">
     <span class="text-xs tracking-wide font-light">aşağı kaydır</span>
@@ -150,7 +195,7 @@
   </a>
 </section>
 
-<!-- ABOUT -->
+<!-- 2. ABOUT -->
 <section id="about" class="relative min-h-[100dvh] px-6 py-28 flex items-center justify-center snap-center shrink-0">
   <div class="max-w-xl mx-auto text-center sm:text-left">
     <p class="font-serif-display text-xl sm:text-2xl leading-relaxed text-zinc-300 font-light">
@@ -160,58 +205,132 @@
     <div class="glass rounded-2xl px-6 py-6 mt-12 text-left relative overflow-hidden group hover:border-white/20 transition-colors">
       <p class="text-sm sm:text-base leading-relaxed text-zinc-400 font-light relative z-10">
         Bu siteyi yalnız kalmış ve dışlanmış hisseden herkes için, tam da sizin gibi biri hazırladı.
-        <span class="text-zinc-200">Yalnız değilsiniz.</span>
+        <span class="text-zinc-200 font-medium">Yalnız değilsiniz.</span>
       </p>
     </div>
   </div>
 </section>
 
-<!-- TOOLS -->
+<!-- 3. TOOLS (Yenilenmiş 3'lü Zengin Kartlar) -->
 <section id="tools" class="relative min-h-[100dvh] px-6 pt-28 pb-16 flex flex-col justify-center snap-start shrink-0">
   <div class="max-w-6xl mx-auto w-full">
-    <h2 class="font-serif-display text-lg sm:text-xl text-zinc-200 font-light mb-10 text-center">
-      Kendine ayırabileceğin küçük alanlar
-    </h2>
+    <div class="text-center mb-12">
+      <span class="text-[11px] uppercase tracking-[0.25em] text-zinc-500 font-medium">Sığınaklar</span>
+      <h2 class="font-serif-display text-2xl sm:text-3xl text-zinc-100 font-light mt-1">
+        Kendine ayırabileceğin küçük alanlar
+      </h2>
+    </div>
     
-    <!-- 3'lü Düzen -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+    <!-- 3 Kart Grid Düzeni -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       
-      <!-- Tool 1: Overthink Ambiyansı -->
-      <div class="card-tool glass rounded-2xl p-7 flex flex-col justify-between">
+      <!-- KART 1: Overthink Ambiyansı -->
+      <div class="card-tool glass rounded-3xl p-7 flex flex-col justify-between relative overflow-hidden group">
+        <!-- Arka Plan İnce Işık -->
+        <div class="absolute -top-16 -right-16 w-36 h-36 bg-white/[0.03] rounded-full blur-2xl group-hover:bg-white/[0.08] transition-all duration-700"></div>
+
         <div>
-          <h3 class="text-zinc-100 text-base font-medium mb-2">Overthink Ambiyansı</h3>
-          <p class="text-sm text-zinc-500 leading-relaxed font-light">
-            Yağmurlu gece manzaraları ve arka planda hüzünlü overthink müzikleri eşliğinde biraz uzaklaş.
+          <!-- Üst Bilgi Rozetleri -->
+          <div class="flex items-center justify-between gap-2 mb-6">
+            <div class="w-11 h-11 rounded-2xl bg-white/[0.07] border border-white/10 flex items-center justify-center text-zinc-200 group-hover:scale-110 group-hover:border-white/25 transition-all">
+              <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 9l10.5-3m0 6.553v3.75a2.25 2.25 0 01-1.632 2.163l-1.32.377a1.803 1.803 0 11-.99-3.467l2.31-.66a.75.75 0 00.632-.723v-4.44m0-4.043v.001M6.75 19.5a2.25 2.25 0 100-4.5 2.25 2.25 0 000 4.5z" />
+              </svg>
+            </div>
+            <span class="text-[10px] uppercase tracking-widest text-zinc-400 bg-white/5 border border-white/5 px-3 py-1 rounded-full">
+              Video & Ses
+            </span>
+          </div>
+
+          <h3 class="text-zinc-100 text-lg font-medium mb-2.5 group-hover:text-white transition-colors">
+            Overthink Ambiyansı
+          </h3>
+          <p class="text-sm text-zinc-400 leading-relaxed font-light">
+            Yağmurlu gece manzaraları ve arka planda hüzünlü overthink müzikleri eşliğinde düşüncelerinden biraz uzaklaş.
           </p>
         </div>
-        <a href="overthink-ambiyansi.html" onclick="event.preventDefault(); window.scrollTo({top: 0, behavior: 'smooth'}); setTimeout(() => window.location.href = 'overthink-ambiyansi.html', 800);" class="mt-6 inline-flex items-center gap-2 text-sm text-zinc-300 hover:text-white transition-colors w-fit border-b border-white/10 hover:border-white/50 pb-0.5">
-          Araca Git
+
+        <!-- Eylem Butonu -->
+        <a href="overthink-ambiyansi.html" onclick="event.preventDefault(); window.scrollTo({top: 0, behavior: 'smooth'}); setTimeout(() => window.location.href = 'overthink-ambiyansi.html', 800);" class="mt-8 pt-5 border-t border-white/5 flex items-center justify-between text-xs text-zinc-300 group-hover:text-white transition-colors">
+          <span class="font-medium tracking-wide">Odaya Gir</span>
+          <div class="w-7 h-7 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-white/15 group-hover:translate-x-1 transition-all">
+            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+            </svg>
+          </div>
         </a>
       </div>
 
-      <!-- Tool 2: Sessiz Duvar -->
-      <div class="card-tool glass rounded-2xl p-7 flex flex-col justify-between">
+      <!-- KART 2: Sessiz Duvar -->
+      <div class="card-tool glass rounded-3xl p-7 flex flex-col justify-between relative overflow-hidden group">
+        <div class="absolute -top-16 -right-16 w-36 h-36 bg-white/[0.03] rounded-full blur-2xl group-hover:bg-white/[0.08] transition-all duration-700"></div>
+
         <div>
-          <h3 class="text-zinc-100 text-base font-medium mb-2">Sessiz Duvar</h3>
-          <p class="text-sm text-zinc-500 leading-relaxed font-light">
-            Düşüncelerini yaz, ekrana bırak ve yavaşça toza dönüşmelerini izle. Kimse okumayacak.
+          <!-- Üst Bilgi Rozetleri -->
+          <div class="flex items-center justify-between gap-2 mb-6">
+            <div class="w-11 h-11 rounded-2xl bg-white/[0.07] border border-white/10 flex items-center justify-center text-zinc-200 group-hover:scale-110 group-hover:border-white/25 transition-all">
+              <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125" />
+              </svg>
+            </div>
+            <span class="text-[10px] uppercase tracking-widest text-zinc-400 bg-white/5 border border-white/5 px-3 py-1 rounded-full">
+              Sıfır Kayıt
+            </span>
+          </div>
+
+          <h3 class="text-zinc-100 text-lg font-medium mb-2.5 group-hover:text-white transition-colors">
+            Sessiz Duvar
+          </h3>
+          <p class="text-sm text-zinc-400 leading-relaxed font-light">
+            Düşüncelerini yaz, ekrana bırak ve yavaşça toza dönüşerek yok oluşlarını izle. Kimse okumayacak.
           </p>
         </div>
-        <a href="sessiz-duvar.html" onclick="event.preventDefault(); window.scrollTo({top: 0, behavior: 'smooth'}); setTimeout(() => window.location.href = 'sessiz-duvar.html', 800);" class="mt-6 inline-flex items-center gap-2 text-sm text-zinc-300 hover:text-white transition-colors w-fit border-b border-white/10 hover:border-white/50 pb-0.5">
-          Başlat
+
+        <!-- Eylem Butonu -->
+        <a href="sessiz-duvar.html" onclick="event.preventDefault(); window.scrollTo({top: 0, behavior: 'smooth'}); setTimeout(() => window.location.href = 'sessiz-duvar.html', 800);" class="mt-8 pt-5 border-t border-white/5 flex items-center justify-between text-xs text-zinc-300 group-hover:text-white transition-colors">
+          <span class="font-medium tracking-wide">Düşünceni Yaz</span>
+          <div class="w-7 h-7 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-white/15 group-hover:translate-x-1 transition-all">
+            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+            </svg>
+          </div>
         </a>
       </div>
 
-      <!-- Tool 3: Zihin Sakinleştirici -->
-      <div class="card-tool glass rounded-2xl p-7 flex flex-col justify-between">
+      <!-- KART 3: Zihin Sakinleştirici -->
+      <div class="card-tool glass rounded-3xl p-7 flex flex-col justify-between relative overflow-hidden group">
+        <div class="absolute -top-16 -right-16 w-36 h-36 bg-white/[0.03] rounded-full blur-2xl group-hover:bg-white/[0.08] transition-all duration-700"></div>
+
         <div>
-          <h3 class="text-zinc-100 text-base font-medium mb-2">Zihin Sakinleştirici</h3>
-          <p class="text-sm text-zinc-500 leading-relaxed font-light">
-            Ritimli bir nefes egzersizi ile birkaç dakikalığına yalnızca nefesine odaklan.
+          <!-- Üst Bilgi Rozetleri -->
+          <div class="flex items-center justify-between gap-2 mb-6">
+            <div class="w-11 h-11 rounded-2xl bg-white/[0.07] border border-white/10 flex items-center justify-center text-zinc-200 group-hover:scale-110 group-hover:border-white/25 transition-all">
+              <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9" />
+              </svg>
+            </div>
+            <span class="text-[10px] uppercase tracking-widest text-zinc-400 bg-white/5 border border-white/5 px-3 py-1 rounded-full">
+              Kılavuzlu
+            </span>
+          </div>
+
+          <h3 class="text-zinc-100 text-lg font-medium mb-2.5 group-hover:text-white transition-colors">
+            Zihin Sakinleştirici
+          </h3>
+          <p class="text-sm text-zinc-400 leading-relaxed font-light">
+            Kutu nefesi ve 4-7-8 ritimli nefes egzersizleri ile kalp atışını yavaşlat ve yalnızca ana odaklan.
           </p>
         </div>
-        <a href="zihin-sakinlestirici.html" onclick="event.preventDefault(); window.scrollTo({top: 0, behavior: 'smooth'}); setTimeout(() => window.location.href = 'zihin-sakinlestirici.html', 800);" class="mt-6 inline-flex items-center gap-2 text-sm text-zinc-300 hover:text-white transition-colors w-fit border-b border-white/10 hover:border-white/50 pb-0.5">
-          Başlat
+
+        <!-- Eylem Butonu -->
+        <a href="zihin-sakinlestirici.html" onclick="event.preventDefault(); window.scrollTo({top: 0, behavior: 'smooth'}); setTimeout(() => window.location.href = 'zihin-sakinlestirici.html', 800);" class="mt-8 pt-5 border-t border-white/5 flex items-center justify-between text-xs text-zinc-300 group-hover:text-white transition-colors">
+          <span class="font-medium tracking-wide">Nefese Odaklan</span>
+          <div class="w-7 h-7 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-white/15 group-hover:translate-x-1 transition-all">
+            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+            </svg>
+          </div>
         </a>
       </div>
 
@@ -219,7 +338,7 @@
   </div>
 </section>
 
-<!-- FOOTER -->
+<!-- 4. FOOTER -->
 <footer class="relative px-6 py-10 border-t border-white/5 snap-end shrink-0 bg-[#0a0a0a]">
   <div class="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
     <p class="text-xs text-zinc-600 font-light">💖 ile yapıldı</p>
