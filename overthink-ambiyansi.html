@@ -5,8 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ambiyans | Overthink Tools</title>
 <script src="https://cdn.tailwindcss.com"></script>
-<!-- MP3 İçinden Kapak Resmi Okuyucu -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jsmediatags/3.9.5/jsmediatags.min.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -125,7 +123,7 @@
         
         <!-- Albüm Kapak Resmi Kutusu -->
         <div class="relative w-10 h-10 rounded-full overflow-hidden bg-white/10 flex items-center justify-center shrink-0 border border-white/10 shadow-inner">
-          <img id="track-cover" src="" alt="Kapak" class="w-full h-full object-cover hidden">
+          <img id="track-cover" src="" alt="Kapak" class="w-full h-full object-cover hidden transition-opacity duration-300">
           <div id="track-icon-fallback" class="w-full h-full flex items-center justify-center">
             <svg class="w-4 h-4 text-zinc-300" fill="currentColor" viewBox="0 0 24 24">
               <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
@@ -172,7 +170,7 @@
 
 <!-- SES VE VİDEO YÖNETİMİ -->
 <script>
-  // 1. Manzara Videoları Listesi (video1'den video9'a kadar)
+  // 1. Manzara Videoları Listesi (video1 - video9)
   const videos = [
     'videos/video1.mp4',
     'videos/video2.mp4',
@@ -233,6 +231,7 @@
   }));
 
   let currentTrackIndex = 0;
+  const coverCache = {}; // Tekrar eden aramaları engellemek için önbellek
 
   // 3. DOM Elemanları
   const bgVideo = document.getElementById('bg-video');
@@ -254,6 +253,7 @@
   const videoNextBtn = document.getElementById('video-next-btn');
   const videoPrevBtn = document.getElementById('video-prev-btn');
 
+  // Başlık ve Sanatçı Ayrıştırma
   function parseTrackTitle(fullTitle) {
     const parts = fullTitle.split(' - ');
     if (parts.length >= 2) {
@@ -269,79 +269,51 @@
   }
 
   function updateTrackInfo() {
-    if(playlist[currentTrackIndex]) {
+    if (playlist[currentTrackIndex]) {
       const { artist, title } = parseTrackTitle(playlist[currentTrackIndex].title);
       artistNameEl.textContent = artist;
       trackNameEl.textContent = title;
       
-      // Kapak ve bildirimleri güvenli biçimde çek
-      loadCoverAndMediaSession(playlist[currentTrackIndex].url, artist, title);
+      // Doğrudan hızlı iTunes araması yap
+      fetchCoverDirectly(artist, title);
     }
   }
 
-  // Güvenli Kapak Resmi Yükleyici (Blob + iTunes Fallback)
-  async function loadCoverAndMediaSession(audioUrl, artist, title) {
-    // Önce ikona dön
+  // Doğrudan iTunes API ile Anında Kapak Çekme
+  async function fetchCoverDirectly(artist, title) {
+    const cacheKey = `${artist} - ${title}`;
+
+    // Önbellekte varsa anında uygula (0 ms gecikme)
+    if (coverCache[cacheKey]) {
+      applyCover(coverCache[cacheKey], artist, title);
+      return;
+    }
+
+    // Arama öncesi fallback ikona geç
     trackCoverEl.src = '';
     trackCoverEl.classList.add('hidden');
     trackFallbackIcon.classList.remove('hidden');
 
-    let coverFound = false;
-
-    // 1. Aşama: MP3 dosyasını Blob olarak indirip ID3 etiketinden oku (CORS Engeli Yok)
     try {
-      const res = await fetch(audioUrl);
+      const query = encodeURIComponent(`${artist} ${title}`);
+      const res = await fetch(`https://itunes.apple.com/search?term=${query}&entity=song&limit=1`);
+      
       if (res.ok) {
-        const blob = await res.blob();
-        if (window.jsmediatags) {
-          await new Promise((resolve) => {
-            window.jsmediatags.read(blob, {
-              onSuccess: function(tag) {
-                const picture = tag.tags.picture;
-                if (picture) {
-                  let base64String = "";
-                  const data = picture.data;
-                  const len = data.length;
-                  const chunkSize = 8192;
-                  for (let i = 0; i < len; i += chunkSize) {
-                    base64String += String.fromCharCode.apply(null, data.slice(i, i + chunkSize));
-                  }
-                  const coverBase64 = `data:${picture.format};base64,${window.btoa(base64String)}`;
-                  applyCover(coverBase64, artist, title);
-                  coverFound = true;
-                }
-                resolve();
-              },
-              onError: function() {
-                resolve();
-              }
-            });
-          });
+        const data = await res.json();
+        if (data.results && data.results.length > 0) {
+          // 100x100 yerine 600x600 yüksek kalite görsel al
+          const highResArtwork = data.results[0].artworkUrl100.replace('100x100bb', '600x600bb');
+          coverCache[cacheKey] = highResArtwork; // Önbelleğe kaydet
+          applyCover(highResArtwork, artist, title);
+          return;
         }
       }
     } catch (e) {
-      // Fetch hata verirse fallback'e geç
+      console.warn("iTunes kapak sorgusu başarısız:", e);
     }
 
-    // 2. Aşama: Eğer MP3'te kapak gömülü değilse resmi iTunes API'sinden çek
-    if (!coverFound) {
-      try {
-        const itunesRes = await fetch(`https://itunes.apple.com/search?term=${encodeURIComponent(artist + ' ' + title)}&entity=song&limit=1`);
-        if (itunesRes.ok) {
-          const itunesData = await itunesRes.json();
-          if (itunesData.results && itunesData.results.length > 0) {
-            const highResArtwork = itunesData.results[0].artworkUrl100.replace('100x100bb', '600x600bb');
-            applyCover(highResArtwork, artist, title);
-            coverFound = true;
-          }
-        }
-      } catch (e) {}
-    }
-
-    // Eğer kapak bulunamadıysa sadece başlık ve sanatçı ile bildirim çubuğunu güncelle
-    if (!coverFound) {
-      updateMediaSession(artist, title, null);
-    }
+    // Bulunamazsa sadece bildirim çubuğunu güncelle
+    updateMediaSession(artist, title, null);
   }
 
   function applyCover(coverUrl, artist, title) {
@@ -379,7 +351,7 @@
     updateTrackInfo();
   }
 
-  // 4. GitHub API ile Depodan Dosyaları Otomatik Çekme (Dinamik)
+  // 4. GitHub API Dinamik Dosya Senkronizasyonu
   async function syncFromGitHub() {
     try {
       const res = await fetch('https://api.github.com/repos/hasanbkaylan-web/overthink.tools-audio/contents/audios');
@@ -396,11 +368,11 @@
         }
       }
     } catch (e) {
-      console.log("GitHub dinamik senkronizasyon pas geçildi, yerel liste devrede.");
+      console.log("GitHub API atlandı, yerel liste devrede.");
     }
   }
 
-  // İlk Başlatma
+  // İlk Yüklemeler
   updateTrackInfo();
   loadTrack(currentTrackIndex);
   syncFromGitHub();
